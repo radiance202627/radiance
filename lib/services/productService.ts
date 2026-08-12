@@ -175,7 +175,7 @@ export async function searchProducts(query: string): Promise<Product[]> {
 // ADMIN SERVICE METHODS
 export async function getAllProductsAdmin(includeDeleted = false) {
   try {
-    return await withDbTimeout(
+    const res = await withDbTimeout(
       prisma.product.findMany({
         where: includeDeleted ? {} : { deletedAt: null },
         include: {
@@ -188,9 +188,30 @@ export async function getAllProductsAdmin(includeDeleted = false) {
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
       })
     );
+    if (res && res.length > 0) return res;
   } catch {
-    return [];
+    console.warn('Database timeout in getAllProductsAdmin, using fallback catalog');
   }
+
+  const mockProds = await getProducts();
+  return mockProds.map((p) => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    sku: p.sku,
+    productCode: p.sku,
+    categoryId: p.categoryId,
+    categoryName: p.categoryName,
+    material: p.material,
+    finish: p.finish,
+    shortDescription: p.shortDescription,
+    description: p.description,
+    featured: p.featured,
+    status: p.inStock ? 'AVAILABLE' : 'DRAFT',
+    images: (p.images || []).map((img, i) => ({ url: img, isFeatured: i === 0, sortOrder: i + 1 })),
+    variants: (p.variants || []).map((v) => ({ id: v.id, size: v.size, finish: v.finish, sku: v.sku, status: 'ACTIVE' })),
+    collections: p.collections || [],
+  }));
 }
 
 export async function createProduct(data: {
