@@ -1,11 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { loginSchema } from '@/lib/validations/schemas';
 import { authenticateUser } from '@/lib/services/userService';
 import { createToken, setSessionCookie } from '@/lib/auth/session';
 import { apiSuccess, apiError, handleApiError } from '@/lib/api-response';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimit = checkRateLimit(request, 5, 60 * 1000); // 5 attempts per min
+    if (!rateLimit.success) {
+      return apiError('Too many login attempts. Please try again in 1 minute.', 429, 'RATE_LIMIT_EXCEEDED');
+    }
+
     const body = await request.json();
     const validation = loginSchema.safeParse(body);
 

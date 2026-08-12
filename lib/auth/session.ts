@@ -81,3 +81,15 @@ export async function getSessionFromRequest(request: NextRequest): Promise<UserS
   if (!token) return null;
   return verifyToken(token);
 }
+
+/**
+ * Verifies if the authenticated session has one of the allowed roles.
+ */
+export async function requireRole(
+  allowedRoles: ('SUPER_ADMIN' | 'ADMIN' | 'SALES_EXECUTIVE')[]
+): Promise<UserSessionPayload | null> {
+  const session = await getSession();
+  if (!session) return null;
+  if (!allowedRoles.includes(session.role)) return null;
+  return session;
+}
