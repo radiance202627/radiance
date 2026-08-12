@@ -3,67 +3,56 @@
 @import "tailwindcss/utilities";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-brand-slate text-brand-text antialiased font-sans;
+    @apply bg-stone-950 text-stone-200 font-sans selection:bg-amber-400/20 selection:text-amber-200;
   }
 
-  h1, h2, h3, .font-serif-luxury {
-    font-family: var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  h1, h2, h3, h4, .font-serif-luxury {
+    font-family: var(--font-serif), 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: -0.015em;
   }
 }
 
-/* Luxury Metallic Shimmer Effects */
-.bg-gold-gradient {
-  background: linear-gradient(135deg, #d4af37 0%, #c59b27 50%, #967216 100%);
+/* Artisan European Hardware Typography & Borders */
+.border-artisan {
+  border-color: rgba(214, 211, 209, 0.12);
 }
 
-.bg-gold-glass {
-  background: rgba(197, 155, 39, 0.08);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(197, 155, 39, 0.2);
+.border-artisan-subtle {
+  border-color: rgba(214, 211, 209, 0.08);
 }
 
-.bg-dark-glass {
-  background: rgba(20, 22, 27, 0.75);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.border-gold-artisan {
+  border-color: rgba(217, 119, 6, 0.25);
 }
 
-.gold-text-gradient {
-  background: linear-gradient(135deg, #f7e7bd 0%, #e5c365 40%, #c59b27 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.border-gold-subtle {
-  border-color: rgba(197, 155, 39, 0.25);
-}
-
-/* Fine custom scrollbars */
+/* Fine Artisan Custom Scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(11, 12, 14, 0.5);
+  background: #0c0a09;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(197, 155, 39, 0.4);
-  border-radius: 4px;
+  background: #292524;
+  border-radius: 9999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(197, 155, 39, 0.8);
+  background: #78716c;
 }
 
-@keyframes floatSmooth {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+/* Image Presentation & Slow Zoom Animation */
+.img-luxury-zoom {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-.animate-float {
-  animation: floatSmooth 6s ease-in-out infinite;
+.group:hover .img-luxury-zoom {
+  transform: scale(1.04);
 }

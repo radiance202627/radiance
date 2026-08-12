@@ -18,33 +18,28 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   lightMode = false,
 }) => {
   return (
-    <div className={`space-y-2.5 ${centered ? 'text-center max-w-3xl mx-auto' : ''} ${className}`}>
+    <div className={`space-y-3 ${centered ? 'text-center max-w-3xl mx-auto' : ''} ${className}`}>
       {subtitle && (
-        <div className={`flex items-center gap-2 text-[11px] font-semibold tracking-[0.25em] uppercase font-sans ${centered ? 'justify-center' : ''} text-brand-brass`}>
-          <span className="h-[1px] w-4 bg-brand-brass/60" />
+        <div className={`flex items-center gap-2.5 text-[11px] font-medium tracking-[0.22em] uppercase ${centered ? 'justify-center' : ''} text-amber-500/90`}>
+          <span className="h-px w-5 bg-amber-500/40" />
           <span>{subtitle}</span>
-          <span className="h-[1px] w-4 bg-brand-brass/60" />
+          {centered && <span className="h-px w-5 bg-amber-500/40" />}
         </div>
       )}
 
       <h2
-        className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight ${
-          lightMode ? 'text-white' : 'text-brand-dark'
-        }`}
-        style={{ fontFamily: "var(--font-serif), 'Cormorant Garamond', serif" }}
+        className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-[1.15] text-stone-100"
       >
         {title}
       </h2>
 
       {description && (
-        <p className={`text-sm sm:text-base font-light leading-relaxed max-w-2xl ${centered ? 'mx-auto' : ''} ${
-          lightMode ? 'text-slate-300' : 'text-brand-text-muted'
-        }`}>
+        <p className={`text-sm sm:text-base font-normal leading-relaxed max-w-2xl text-stone-400 ${centered ? 'mx-auto' : ''}`}>
           {description}
         </p>
       )}
 
-      <div className={`h-[1.5px] w-12 bg-gradient-to-r from-brand-brass via-brand-brass-light to-transparent ${centered ? 'mx-auto' : ''} mt-4`} />
+      <div className={`h-px w-10 bg-amber-500/40 ${centered ? 'mx-auto' : ''} mt-3`} />
     </div>
   );
 };
