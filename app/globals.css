@@ -20,20 +20,29 @@
   }
 }
 
-/* Artisan European Hardware Typography & Borders */
-.border-artisan {
-  border-color: rgba(214, 211, 209, 0.12);
+/* Artisan European Hardware Visual Utilities */
+.card-luxury-frame {
+  @apply bg-stone-900 border border-stone-800 border-t-stone-700/60 shadow-[0_20px_50px_rgba(0,0,0,0.4)] rounded-2xl transition-all duration-500;
 }
 
-.border-artisan-subtle {
-  border-color: rgba(214, 211, 209, 0.08);
+.card-luxury-frame:hover {
+  @apply border-amber-500/30 border-t-amber-400/40 shadow-[0_25px_60px_rgba(0,0,0,0.6)];
 }
 
-.border-gold-artisan {
-  border-color: rgba(217, 119, 6, 0.25);
+.img-frame-inset {
+  @apply relative overflow-hidden;
 }
 
-/* Fine Artisan Custom Scrollbars */
+.img-frame-inset::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Custom Scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
   height: 4px;

@@ -34,23 +34,25 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-stone-900/95 backdrop-blur-md text-stone-100 border-b border-stone-800/80 shadow-lg">
+    <header className="sticky top-0 z-40 bg-stone-950/95 backdrop-blur-xl text-stone-100 border-b border-stone-800/80 shadow-2xl">
       {/* Top B2B Announcement Bar */}
-      <div className="bg-stone-950 text-stone-400 text-[11px] py-2 px-4 border-b border-stone-800/60 font-sans">
+      <div className="bg-[#0c0a09] text-stone-400 text-[11px] py-2 px-4 border-b border-white/[0.05] font-sans">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 font-medium text-stone-300">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 font-medium text-stone-300 tracking-[0.14em] uppercase text-[10px]">
               <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
               European B2B Architectural Hardware Manufacturer
             </span>
-            <span className="hidden md:inline text-stone-700">|</span>
-            <span className="hidden md:inline text-stone-400">Custom Finishes & Architectural Support</span>
+            <span className="hidden md:inline-block w-1 h-1 rounded-full bg-amber-500/30" />
+            <span className="hidden md:inline text-stone-400 text-[10px] tracking-[0.12em] uppercase">
+              Custom Finishes & Architectural Support
+            </span>
           </div>
-          <div className="flex items-center gap-4 text-[11px] font-medium">
+          <div className="flex items-center gap-3 text-[10px] font-medium tracking-[0.14em] uppercase">
             <Link href="/request-quote" className="hover:text-amber-400 transition-colors">
               Submit RFQ
             </Link>
-            <span className="text-stone-700">•</span>
+            <span className="w-1 h-1 rounded-full bg-amber-500/30" />
             <Link href="/contact" className="hover:text-amber-400 transition-colors">
               Trade Enquiries
             </Link>
@@ -84,11 +86,11 @@ export const Header: React.FC = () => {
                       }`}
                     >
                       {link.label}
-                      <ChevronDown className="w-3.5 h-3.5 text-stone-500 group-hover:rotate-180 transition-transform" />
+                      <ChevronDown className="w-3.5 h-3.5 text-stone-500 group-hover:rotate-180 transition-transform duration-300" />
                     </Link>
 
                     {/* Category Megamenu Dropdown */}
-                    <div className="absolute top-full left-0 w-80 bg-stone-900 border border-stone-800 shadow-2xl rounded-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+                    <div className="absolute top-full left-0 w-80 bg-stone-900/95 backdrop-blur-xl border border-amber-500/20 shadow-2xl rounded-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
                       <div className="px-4 py-2 border-b border-stone-800 mb-1">
                         <p className="text-[10px] font-semibold text-amber-400 uppercase tracking-widest">
                           Explore Categories
@@ -99,7 +101,7 @@ export const Header: React.FC = () => {
                           <Link
                             key={cat.id}
                             href={`/products/${cat.slug}`}
-                            className="block px-4 py-2.5 text-xs text-stone-300 hover:bg-stone-800 hover:text-amber-400 transition-colors"
+                            className="block px-4 py-2.5 text-xs text-stone-300 hover:bg-stone-800/80 hover:text-amber-400 transition-colors border-b border-stone-800/40 last:border-0"
                           >
                             <span className="font-semibold text-stone-200">{cat.name}</span>
                             <span className="block text-[10px] text-stone-500 font-sans mt-0.5">
@@ -122,7 +124,7 @@ export const Header: React.FC = () => {
                   }`}
                 >
                   {link.label}
-                  {isActive && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-400" />}
+                  {isActive && <span className="absolute bottom-0 left-0 right-0 h-px bg-amber-400" />}
                 </Link>
               );
             })}
