@@ -1,0 +1,199 @@
+import prisma, { withDbTimeout } from '@/lib/prisma';
+import { categories as mockCategories } from '@/data/categories';
+import { Category, Subcategory } from '@/lib/types';
+import { generateUniqueSlug } from '@/lib/utils/slug';
+
+export async function getCategories(): Promise<Category[]> {
+  try {
+    const dbCategories = await withDbTimeout(
+      prisma.category.findMany({
+        where: { parentId: null, status: 'ACTIVE', deletedAt: null },
+        include: {
+          children: {
+            where: { status: 'ACTIVE', deletedAt: null },
+            orderBy: { sortOrder: 'asc' },
+          },
+        },
+        orderBy: { sortOrder: 'asc' },
+      })
+    );
+
+    if (dbCategories && dbCategories.length > 0) {
+      return dbCategories.map((cat) => ({
+        id: cat.id,
+        name: cat.name,
+        slug: cat.slug,
+        description: cat.description || '',
+        heroImage: cat.image || '',
+        subcategories: cat.children.map((sub) => ({
+          id: sub.id,
+          name: sub.name,
+          slug: sub.slug,
+          categoryId: cat.id,
+          description: sub.description || '',
+          image: sub.image || undefined,
+        })),
+      }));
+    }
+  } catch (error) {
+    console.warn('Database error or timeout in getCategories, falling back to mock data');
+  }
+
+  return mockCategories;
+}
+
+export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+  try {
+    const cat = await withDbTimeout(
+      prisma.category.findFirst({
+        where: { slug, deletedAt: null },
+        include: {
+          children: {
+            where: { status: 'ACTIVE', deletedAt: null },
+            orderBy: { sortOrder: 'asc' },
+          },
+        },
+      })
+    );
+
+    if (cat) {
+      return {
+        id: cat.id,
+        name: cat.name,
+        slug: cat.slug,
+        description: cat.description || '',
+        heroImage: cat.image || '',
+        subcategories: cat.children.map((sub) => ({
+          id: sub.id,
+          name: sub.name,
+          slug: sub.slug,
+          categoryId: cat.id,
+          description: sub.description || '',
+          image: sub.image || undefined,
+        })),
+      };
+    }
+  } catch (error) {
+    console.warn('Database error or timeout in getCategoryBySlug, falling back to mock data');
+  }
+
+  const mock = mockCategories.find((c) => c.slug === slug);
+  return mock || null;
+}
+
+export async function getSubcategoryBySlug(
+  categorySlug: string,
+  subcategorySlug: string
+): Promise<{ category: Category; subcategory: Subcategory } | null> {
+  const category = await getCategoryBySlug(categorySlug);
+  if (!category) return null;
+
+  const subcategory = category.subcategories.find((sub) => sub.slug === subcategorySlug);
+  if (!subcategory) return null;
+
+  return { category, subcategory };
+}
+
+// ADMIN SERVICE METHODS
+export async function getAllCategoriesAdmin(includeDeleted = false) {
+  try {
+    return await withDbTimeout(
+      prisma.category.findMany({
+        where: includeDeleted ? {} : { deletedAt: null },
+        include: {
+          parent: true,
+          children: true,
+          _count: { select: { products: true } },
+        },
+        orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      })
+    );
+  } catch {
+    return [];
+  }
+}
+
+export async function createCategory(data: {
+  name: string;
+  slug?: string;
+  description?: string;
+  image?: string;
+  parentId?: string | null;
+  sortOrder?: number;
+  status?: 'ACTIVE' | 'DRAFT' | 'ARCHIVED';
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  createdBy?: string;
+}) {
+  const finalSlug = data.slug ? data.slug : await generateUniqueSlug('category', data.name);
+
+  return prisma.category.create({
+    data: {
+      name: data.name,
+      slug: finalSlug,
+      description: data.description,
+      image: data.image,
+      parentId: data.parentId || null,
+      sortOrder: data.sortOrder ?? 0,
+      status: data.status || 'ACTIVE',
+      seoTitle: data.seoTitle,
+      seoDescription: data.seoDescription,
+      seoKeywords: data.seoKeywords,
+      canonicalUrl: data.canonicalUrl,
+      ogImage: data.ogImage,
+      createdBy: data.createdBy,
+    },
+  });
+}
+
+export async function updateCategory(
+  id: string,
+  data: Partial<{
+    name: string;
+    slug: string;
+    description: string;
+    image: string;
+    parentId: string | null;
+    sortOrder: number;
+    status: 'ACTIVE' | 'DRAFT' | 'ARCHIVED';
+    seoTitle: string;
+    seoDescription: string;
+    seoKeywords: string;
+    canonicalUrl: string;
+    ogImage: string;
+    updatedBy: string;
+  }>
+) {
+  if (data.name && !data.slug) {
+    data.slug = await generateUniqueSlug('category', data.name, id);
+  }
+
+  return prisma.category.update({
+    where: { id },
+    data,
+  });
+}
+
+export async function softDeleteCategory(id: string, updatedBy?: string) {
+  return prisma.category.update({
+    where: { id },
+    data: {
+      deletedAt: new Date(),
+      updatedBy,
+    },
+  });
+}
+
+export async function restoreCategory(id: string) {
+  return prisma.category.update({
+    where: { id },
+    data: { deletedAt: null },
+  });
+}
+
+export async function deleteCategory(id: string) {
+  return softDeleteCategory(id);
+}

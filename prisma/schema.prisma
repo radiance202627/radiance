@@ -1,0 +1,309 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  SALES_EXECUTIVE
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CategoryStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+enum ProductStatus {
+  AVAILABLE
+  CUSTOM_ORDER
+  DISCONTINUED
+  PUBLISHED
+  DRAFT
+}
+
+enum VariantStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CollectionStatus {
+  ACTIVE
+  DRAFT
+}
+
+enum QuoteStatus {
+  NEW
+  CONTACTED
+  QUOTATION_SENT
+  NEGOTIATION
+  WON
+  LOST
+}
+
+model User {
+  id             String         @id @default(cuid())
+  name           String
+  email          String         @unique
+  password       String
+  role           Role           @default(ADMIN)
+  status         UserStatus     @default(ACTIVE)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  assignedQuotes QuoteRequest[] @relation("AssignedQuotes")
+
+  @@index([email])
+  @@index([role])
+}
+
+model Category {
+  id                  String          @id @default(cuid())
+  name                String
+  slug                String          @unique
+  description         String?         @db.Text
+  image               String?
+  parentId            String?
+  parent              Category?       @relation("CategoryToParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children            Category[]      @relation("CategoryToParent")
+  sortOrder           Int             @default(0)
+  status              CategoryStatus  @default(ACTIVE)
+  seoTitle            String?
+  seoDescription      String?
+  seoKeywords         String?
+  canonicalUrl        String?
+  ogImage             String?
+  deletedAt           DateTime?
+  createdBy           String?
+  updatedBy           String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  products            Product[]       @relation("CategoryProducts")
+  subcategoryProducts Product[]       @relation("SubcategoryProducts")
+
+  @@index([slug])
+  @@index([parentId])
+  @@index([status])
+  @@index([deletedAt])
+  @@index([sortOrder])
+}
+
+model Product {
+  id               String              @id @default(cuid())
+  name             String
+  slug             String              @unique
+  sku              String              @unique
+  productCode      String?
+  categoryId       String
+  category         Category            @relation("CategoryProducts", fields: [categoryId], references: [id])
+  subcategoryId    String?
+  subcategory      Category?           @relation("SubcategoryProducts", fields: [subcategoryId], references: [id])
+  shortDescription String?             @db.Text
+  description      String?             @db.Text
+  material         String
+  finish           String?
+  weight           String?
+  dimensions       String?
+  styles           Json?
+  specifications   Json?
+  featured         Boolean             @default(false)
+  sortOrder        Int                 @default(0)
+  status           ProductStatus       @default(AVAILABLE)
+  seoTitle         String?
+  seoDescription   String?
+  seoKeywords      String?
+  canonicalUrl     String?
+  ogImage          String?
+  publishedAt      DateTime?
+  deletedAt        DateTime?
+  createdBy        String?
+  updatedBy        String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  images           ProductImage[]
+  variants         ProductVariant[]
+  collections      ProductCollection[]
+  quoteItems       QuoteItem[]
+
+  @@index([slug])
+  @@index([sku])
+  @@index([categoryId])
+  @@index([subcategoryId])
+  @@index([status])
+  @@index([featured])
+  @@index([deletedAt])
+  @@index([sortOrder])
+}
+
+model ProductImage {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url        String
+  altText    String?
+  isFeatured Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([productId])
+  @@index([isFeatured])
+  @@index([sortOrder])
+}
+
+model ProductVariant {
+  id          String        @id @default(cuid())
+  productId   String
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size        String?
+  finish      String?
+  material    String?
+  sku         String?       @unique
+  variantCode String?
+  sortOrder   Int           @default(0)
+  status      VariantStatus @default(ACTIVE)
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  quoteItems  QuoteItem[]
+
+  @@index([productId])
+  @@index([sku])
+  @@index([status])
+  @@index([sortOrder])
+  @@index([deletedAt])
+}
+
+model Collection {
+  id             String              @id @default(cuid())
+  name           String
+  slug           String              @unique
+  description    String?             @db.Text
+  image          String?
+  featured       Boolean             @default(false)
+  sortOrder      Int                 @default(0)
+  status         CollectionStatus    @default(ACTIVE)
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
+  canonicalUrl   String?
+  ogImage        String?
+  deletedAt      DateTime?
+  createdBy      String?
+  updatedBy      String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  products       ProductCollection[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([featured])
+  @@index([deletedAt])
+  @@index([sortOrder])
+}
+
+model ProductCollection {
+  productId    String
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@id([productId, collectionId])
+  @@index([productId])
+  @@index([collectionId])
+}
+
+model Customer {
+  id             String         @id @default(cuid())
+  name           String
+  company        String
+  email          String
+  phone          String
+  country        String
+  city           String
+  businessType   String
+  companyWebsite String?
+  notes          String?        @db.Text
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  quoteRequests  QuoteRequest[]
+
+  @@index([email])
+  @@index([company])
+  @@index([deletedAt])
+}
+
+model QuoteRequest {
+  id                     String      @id @default(cuid())
+  customerId             String
+  customer               Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  status                 QuoteStatus @default(NEW)
+  notes                  String?     @db.Text
+  adminNotes             String?     @db.Text
+  assignedAdminId        String?
+  assignedAdmin          User?       @relation("AssignedQuotes", fields: [assignedAdminId], references: [id], onDelete: SetNull)
+  message                String?     @db.Text
+  companyWebsite         String?
+  expectedQuantity       String?
+  requiredFinish         String?
+  requiredDeliveryDate   String?
+  additionalRequirements String?     @db.Text
+  submittedDate          DateTime    @default(now())
+  deletedAt              DateTime?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  items                  QuoteItem[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([assignedAdminId])
+  @@index([deletedAt])
+  @@index([submittedDate])
+}
+
+model QuoteItem {
+  id               String          @id @default(cuid())
+  quoteRequestId   String
+  quoteRequest     QuoteRequest    @relation(fields: [quoteRequestId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product         @relation(fields: [productId], references: [id])
+  variantId        String?
+  variant          ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  selectedFinish   String?
+  selectedSize     String?
+  selectedMaterial String?
+  quantity         Int             @default(1)
+  notes            String?         @db.Text
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([quoteRequestId])
+  @@index([productId])
+  @@index([variantId])
+}
+
+model SiteSettings {
+  id            String   @id @default("default")
+  companyName   String   @default("B2B Architectural Hardware")
+  logo          String?
+  email         String?  @default("info@architecturalhardware.com")
+  phone         String?  @default("+1 (800) 555-0199")
+  whatsapp      String?  @default("+1 (800) 555-0199")
+  address       String?  @db.Text
+  googleMapUrl  String?  @db.Text
+  socialLinks   Json?
+  seoDefaults   Json?
+  footerContent Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
