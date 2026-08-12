@@ -203,13 +203,13 @@ export async function getAllProductsAdmin(includeDeleted = false) {
     categoryId: p.categoryId,
     categoryName: p.categoryName,
     material: p.material,
-    finish: p.finish,
+    finish: p.finishes ? p.finishes.join(', ') : '',
     shortDescription: p.shortDescription,
     description: p.description,
     featured: p.featured,
-    status: p.inStock ? 'AVAILABLE' : 'DRAFT',
+    status: 'AVAILABLE',
     images: (p.images || []).map((img, i) => ({ url: img, isFeatured: i === 0, sortOrder: i + 1 })),
-    variants: (p.variants || []).map((v) => ({ id: v.id, size: v.size, finish: v.finish, sku: v.sku, status: 'ACTIVE' })),
+    variants: [],
     collections: p.collections || [],
   }));
 }
