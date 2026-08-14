@@ -4,34 +4,40 @@ import { findOrCreateCustomer } from './customerService';
 import { products as staticProducts } from '@/data/products';
 
 export async function getAllQuoteRequests(includeDeleted = false) {
-  console.log('[QUOTE_SERVICE] Fetching quote requests directly from PostgreSQL database...');
-  const res = await withDbTimeout(
-    prisma.quoteRequest.findMany({
-      where: includeDeleted ? {} : { deletedAt: null },
-      include: {
-        customer: true,
-        assignedAdmin: {
-          select: { id: true, name: true, email: true, role: true },
-        },
-        items: {
-          include: {
-            product: {
-              select: {
-                id: true,
-                name: true,
-                sku: true,
-                material: true,
+  try {
+    console.log('[QUOTE_SERVICE] Fetching quote requests directly from PostgreSQL database...');
+    const res = await withDbTimeout(
+      prisma.quoteRequest.findMany({
+        where: includeDeleted ? {} : { deletedAt: null },
+        include: {
+          customer: true,
+          assignedAdmin: {
+            select: { id: true, name: true, email: true, role: true },
+          },
+          items: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  name: true,
+                  sku: true,
+                  material: true,
+                },
               },
+              variant: true,
             },
-            variant: true,
           },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
-  );
-  console.log(`[QUOTE_SERVICE] Successfully fetched ${res.length} quote request(s) from PostgreSQL.`);
-  return res;
+        orderBy: { createdAt: 'desc' },
+      }),
+      10000
+    );
+    console.log(`[QUOTE_SERVICE] Successfully fetched ${res.length} quote request(s) from PostgreSQL.`);
+    return res;
+  } catch (error) {
+    console.error('[QUOTE_SERVICE] Error in getAllQuoteRequests:', error);
+    return [];
+  }
 }
 
 export async function getQuoteRequestById(id: string) {

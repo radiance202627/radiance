@@ -198,20 +198,21 @@ export const QuotesClient: React.FC<QuotesClientProps> = ({ initialQuotes }) => 
   };
 
   // Filtered quote list
-  const filteredQuotes = quotes.filter((q) => {
+  const filteredQuotes = (quotes || []).filter((q) => {
+    if (!q) return false;
     if (selectedStatus !== 'ALL' && q.status !== selectedStatus) return false;
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       const matchCustomer =
-        q.customer.name.toLowerCase().includes(query) ||
-        q.customer.company.toLowerCase().includes(query) ||
-        q.customer.email.toLowerCase().includes(query) ||
-        q.customer.country.toLowerCase().includes(query);
-      const matchId = q.id.toLowerCase().includes(query);
-      const matchItems = q.items.some(
+        (q.customer?.name || '').toLowerCase().includes(query) ||
+        (q.customer?.company || '').toLowerCase().includes(query) ||
+        (q.customer?.email || '').toLowerCase().includes(query) ||
+        (q.customer?.country || '').toLowerCase().includes(query);
+      const matchId = (q.id || '').toLowerCase().includes(query);
+      const matchItems = (q.items || []).some(
         (it) =>
-          it.product?.name.toLowerCase().includes(query) ||
-          it.product?.sku.toLowerCase().includes(query)
+          (it.product?.name || '').toLowerCase().includes(query) ||
+          (it.product?.sku || '').toLowerCase().includes(query)
       );
       return matchCustomer || matchId || matchItems;
     }
@@ -328,9 +329,16 @@ export const QuotesClient: React.FC<QuotesClientProps> = ({ initialQuotes }) => 
                       })
                     : 'Recent';
 
-                  const displayRef = q.id.startsWith('RFQ-')
+                  const displayRef = q.id?.startsWith('RFQ-')
                     ? q.id
-                    : `RFQ-${q.id.slice(-6).toUpperCase()}`;
+                    : `RFQ-${(q.id || '000000').slice(-6).toUpperCase()}`;
+
+                  const custCompany = q.customer?.company || 'General Client';
+                  const custName = q.customer?.name || 'N/A';
+                  const custEmail = q.customer?.email || 'N/A';
+                  const custCountry = q.customer?.country || 'Global';
+                  const custType = q.customer?.businessType || 'B2B Client';
+                  const itemLength = q.items?.length || 0;
 
                   return (
                     <tr
@@ -344,18 +352,18 @@ export const QuotesClient: React.FC<QuotesClientProps> = ({ initialQuotes }) => 
                       </td>
 
                       <td className="py-4 px-4">
-                        <span className="font-semibold text-stone-100 block">{q.customer.company}</span>
-                        <span className="text-[11px] text-stone-400 font-sans">{q.customer.name} • {q.customer.email}</span>
+                        <span className="font-semibold text-stone-100 block">{custCompany}</span>
+                        <span className="text-[11px] text-stone-400 font-sans">{custName} • {custEmail}</span>
                       </td>
 
                       <td className="py-4 px-4 font-sans text-slate-300">
-                        <span className="block font-medium text-stone-300">{q.customer.country}</span>
-                        <span className="text-[10px] text-stone-500">{q.customer.businessType}</span>
+                        <span className="block font-medium text-stone-300">{custCountry}</span>
+                        <span className="text-[10px] text-stone-500">{custType}</span>
                       </td>
 
                       <td className="py-4 px-4 font-mono">
                         <span className="bg-stone-950 border border-stone-800 px-2 py-1 rounded text-stone-300 font-semibold text-[11px]">
-                          {q.items.length} Products
+                          {itemLength} Products
                         </span>
                       </td>
 
