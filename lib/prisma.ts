@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
  * Wraps a Prisma query with a fast timeout (default 2000ms) to ensure UI responsiveness
  * if PostgreSQL database server is offline or unreachable.
  */
-export async function withDbTimeout<T>(promise: Promise<T>, timeoutMs = 2000): Promise<T> {
+export async function withDbTimeout<T>(promise: Promise<T>, timeoutMs = 5000): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((_, reject) =>

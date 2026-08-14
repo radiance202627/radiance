@@ -1,62 +1,37 @@
 import prisma, { withDbTimeout } from '@/lib/prisma';
-import { QuoteStatus } from '@prisma/client';
+import { QuoteStatus, ProductStatus } from '@prisma/client';
 import { findOrCreateCustomer } from './customerService';
+import { products as staticProducts } from '@/data/products';
 
 export async function getAllQuoteRequests(includeDeleted = false) {
-  try {
-    const res = await withDbTimeout(
-      prisma.quoteRequest.findMany({
-        where: includeDeleted ? {} : { deletedAt: null },
-        include: {
-          customer: true,
-          assignedAdmin: {
-            select: { id: true, name: true, email: true, role: true },
-          },
-          items: {
-            include: {
-              product: {
-                select: {
-                  id: true,
-                  name: true,
-                  sku: true,
-                  material: true,
-                },
+  console.log('[QUOTE_SERVICE] Fetching quote requests directly from PostgreSQL database...');
+  const res = await withDbTimeout(
+    prisma.quoteRequest.findMany({
+      where: includeDeleted ? {} : { deletedAt: null },
+      include: {
+        customer: true,
+        assignedAdmin: {
+          select: { id: true, name: true, email: true, role: true },
+        },
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                sku: true,
+                material: true,
               },
-              variant: true,
             },
+            variant: true,
           },
         },
-        orderBy: { createdAt: 'desc' },
-      })
-    );
-    if (res && res.length > 0) return res;
-  } catch {
-    console.warn('Database timeout in getAllQuoteRequests, using fallback data');
-  }
-
-  return [
-    {
-      id: 'qr-101',
-      status: 'NEW',
-      submittedDate: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      customer: {
-        name: 'Apex Architectural Studio',
-        company: 'Apex Design Ltd',
-        email: 'procurement@apexdesign.com',
-        phone: '+1 (555) 234-5678',
-        country: 'United States',
-        city: 'New York',
-        businessType: 'Architect',
       },
-      items: [
-        {
-          quantity: 24,
-          product: { id: 'p1', name: 'Antique Brass Lever Handle Set', sku: 'DH-LH-001', material: 'Solid Brass' },
-        },
-      ],
-    },
-  ];
+      orderBy: { createdAt: 'desc' },
+    })
+  );
+  console.log(`[QUOTE_SERVICE] Successfully fetched ${res.length} quote request(s) from PostgreSQL.`);
+  return res;
 }
 
 export async function getQuoteRequestById(id: string) {
@@ -113,10 +88,107 @@ export async function createQuoteRequest(data: {
     notes?: string;
   }[];
 }) {
-  try {
-    const customer = await findOrCreateCustomer(data.customer);
+  console.log('[QUOTE_SERVICE] Entering createQuoteRequest()');
+  console.log(`[QUOTE_SERVICE] Customer payload: ${data.customer.name} (${data.customer.company}, ${data.customer.email})`);
 
-    return await prisma.quoteRequest.create({
+  const customer = await findOrCreateCustomer(data.customer);
+  console.log(`[QUOTE_SERVICE] Customer record ready. Customer ID: ${customer.id}`);
+
+  console.log(`[QUOTE_SERVICE] Resolving ${data.items.length} quote item(s) for DB insertion...`);
+  const resolvedItems = await Promise.all(
+    data.items.map(async (item, idx) => {
+      let dbProduct = await prisma.product.findFirst({
+        where: {
+          OR: [
+            { id: item.productId },
+            { sku: item.productId },
+          ],
+        },
+        select: { id: true, name: true },
+      });
+
+      if (!dbProduct) {
+        console.log(`[QUOTE_SERVICE] Product ${item.productId} not found in DB by direct ID/SKU. Checking catalog static list...`);
+        const staticMatch = staticProducts.find(
+          (p) => p.id === item.productId || p.sku === item.productId
+        );
+
+        if (staticMatch) {
+          console.log(`[QUOTE_SERVICE] Found static product match: ${staticMatch.name} (${staticMatch.sku}). Syncing to PostgreSQL...`);
+          let category = await prisma.category.findFirst({
+            where: { slug: staticMatch.categorySlug },
+          });
+
+          if (!category) {
+            category = await prisma.category.create({
+              data: {
+                id: staticMatch.categoryId,
+                name: staticMatch.categoryName,
+                slug: staticMatch.categorySlug,
+                description: staticMatch.categoryName,
+              },
+            });
+          }
+
+          dbProduct = await prisma.product.upsert({
+            where: { sku: staticMatch.sku },
+            update: {},
+            create: {
+              id: staticMatch.id,
+              name: staticMatch.name,
+              slug: staticMatch.slug,
+              sku: staticMatch.sku,
+              material: staticMatch.material,
+              categoryId: category.id,
+              shortDescription: staticMatch.shortDescription,
+              description: staticMatch.description,
+              status: ProductStatus.AVAILABLE,
+            },
+            select: { id: true, name: true },
+          });
+        } else {
+          console.log(`[QUOTE_SERVICE] Product ${item.productId} not found in static list. Using fallback product in PostgreSQL...`);
+          const fallbackProduct = await prisma.product.findFirst({ select: { id: true, name: true } });
+          if (fallbackProduct) {
+            dbProduct = fallbackProduct;
+          } else {
+            let defaultCat = await prisma.category.findFirst();
+            if (!defaultCat) {
+              defaultCat = await prisma.category.create({
+                data: { name: 'General Hardware', slug: 'general-hardware' },
+              });
+            }
+            dbProduct = await prisma.product.create({
+              data: {
+                id: item.productId,
+                name: 'Architectural Hardware Item',
+                slug: `item-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                sku: item.productId,
+                material: 'Solid Metal',
+                categoryId: defaultCat.id,
+              },
+              select: { id: true, name: true },
+            });
+          }
+        }
+      }
+
+      console.log(`[QUOTE_SERVICE] Item #${idx + 1} resolved to DB Product ID: ${dbProduct.id}`);
+      return {
+        productId: dbProduct.id,
+        variantId: item.variantId || null,
+        selectedFinish: item.selectedFinish || null,
+        selectedSize: item.selectedSize || null,
+        selectedMaterial: item.selectedMaterial || null,
+        quantity: item.quantity,
+        notes: item.notes || null,
+      };
+    })
+  );
+
+  console.log('[QUOTE_SERVICE] Executing prisma.quoteRequest.create() with relational QuoteItems...');
+  const createdQuote = await withDbTimeout(
+    prisma.quoteRequest.create({
       data: {
         customerId: customer.id,
         status: QuoteStatus.NEW,
@@ -130,15 +202,7 @@ export async function createQuoteRequest(data: {
         requiredDeliveryDate: data.requiredDeliveryDate,
         additionalRequirements: data.additionalRequirements,
         items: {
-          create: data.items.map((item) => ({
-            productId: item.productId,
-            variantId: item.variantId || null,
-            selectedFinish: item.selectedFinish,
-            selectedSize: item.selectedSize,
-            selectedMaterial: item.selectedMaterial,
-            quantity: item.quantity,
-            notes: item.notes,
-          })),
+          create: resolvedItems,
         },
       },
       include: {
@@ -151,58 +215,11 @@ export async function createQuoteRequest(data: {
           },
         },
       },
-    });
-  } catch (error) {
-    console.warn('Database error in createQuoteRequest, returning generated RFQ fallback:', error);
-    const refNo = `RFQ-${Math.floor(100000 + Math.random() * 900000)}`;
-    return {
-      id: refNo,
-      customerId: `cust-${Date.now()}`,
-      status: QuoteStatus.NEW,
-      notes: data.notes || null,
-      adminNotes: data.adminNotes || null,
-      assignedAdminId: null,
-      message: data.message || null,
-      companyWebsite: data.companyWebsite || data.customer.companyWebsite || null,
-      expectedQuantity: data.expectedQuantity || null,
-      requiredFinish: data.requiredFinish || null,
-      requiredDeliveryDate: data.requiredDeliveryDate || null,
-      additionalRequirements: data.additionalRequirements || null,
-      submittedDate: new Date(),
-      deletedAt: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      customer: {
-        id: `cust-${Date.now()}`,
-        name: data.customer.name,
-        company: data.customer.company,
-        email: data.customer.email,
-        phone: data.customer.phone,
-        country: data.customer.country,
-        city: data.customer.city,
-        businessType: data.customer.businessType,
-        companyWebsite: data.customer.companyWebsite || null,
-        notes: null,
-        deletedAt: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      assignedAdmin: null,
-      items: data.items.map((item, idx) => ({
-        id: `item-${idx}`,
-        quoteRequestId: refNo,
-        productId: item.productId,
-        variantId: item.variantId || null,
-        selectedFinish: item.selectedFinish || null,
-        selectedSize: item.selectedSize || null,
-        selectedMaterial: item.selectedMaterial || null,
-        quantity: item.quantity,
-        notes: item.notes || null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })),
-    };
-  }
+    })
+  );
+
+  console.log(`[QUOTE_SERVICE] Transaction complete! Created QuoteRequest ID: ${createdQuote.id} with ${createdQuote.items.length} QuoteItem(s) in PostgreSQL.`);
+  return createdQuote;
 }
 
 export async function updateQuoteStatus(

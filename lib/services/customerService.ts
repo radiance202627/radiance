@@ -61,61 +61,51 @@ export async function findOrCreateCustomer(data: {
   companyWebsite?: string;
   notes?: string;
 }) {
-  try {
-    const existing = await withDbTimeout(
-      prisma.customer.findFirst({
-        where: { email: data.email.toLowerCase().trim() },
-      })
-    );
+  const emailClean = data.email.toLowerCase().trim();
+  console.log(`[CUSTOMER_SERVICE] Finding or creating customer in DB for email: ${emailClean}`);
 
-    if (existing) {
-      return await prisma.customer.update({
-        where: { id: existing.id },
-        data: {
-          name: data.name,
-          company: data.company,
-          phone: data.phone,
-          country: data.country,
-          city: data.city,
-          businessType: data.businessType,
-          companyWebsite: data.companyWebsite || existing.companyWebsite,
-          notes: data.notes || existing.notes,
-          deletedAt: null,
-        },
-      });
-    }
+  const existing = await withDbTimeout(
+    prisma.customer.findFirst({
+      where: { email: emailClean },
+    })
+  );
 
-    return await prisma.customer.create({
+  if (existing) {
+    console.log(`[CUSTOMER_SERVICE] Existing customer found in DB (ID: ${existing.id}). Updating record...`);
+    const updated = await prisma.customer.update({
+      where: { id: existing.id },
       data: {
         name: data.name,
         company: data.company,
-        email: data.email.toLowerCase().trim(),
         phone: data.phone,
         country: data.country,
         city: data.city,
         businessType: data.businessType,
-        companyWebsite: data.companyWebsite,
-        notes: data.notes,
+        companyWebsite: data.companyWebsite || existing.companyWebsite,
+        notes: data.notes || existing.notes,
+        deletedAt: null,
       },
     });
-  } catch (error) {
-    console.warn('Database timeout/error in findOrCreateCustomer, using fallback customer object:', error);
-    return {
-      id: `cust-${Date.now()}`,
+    console.log(`[CUSTOMER_SERVICE] Customer updated successfully in DB. Customer ID: ${updated.id}`);
+    return updated;
+  }
+
+  console.log(`[CUSTOMER_SERVICE] Creating new Customer record in PostgreSQL...`);
+  const created = await prisma.customer.create({
+    data: {
       name: data.name,
       company: data.company,
-      email: data.email,
+      email: emailClean,
       phone: data.phone,
       country: data.country,
       city: data.city,
       businessType: data.businessType,
-      companyWebsite: data.companyWebsite || null,
-      notes: data.notes || null,
-      deletedAt: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-  }
+      companyWebsite: data.companyWebsite,
+      notes: data.notes,
+    },
+  });
+  console.log(`[CUSTOMER_SERVICE] New Customer inserted successfully into PostgreSQL. Customer ID: ${created.id}`);
+  return created;
 }
 
 export async function updateCustomer(
