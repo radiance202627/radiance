@@ -17,7 +17,7 @@ async function main() {
       email: 'info@architecturalhardware.com',
       phone: '+1 (800) 555-0199',
       whatsapp: '+1 (800) 555-0199',
-      address: '100 Architectural Way, Hardware District, NY 10001',
+      address: 'Building No. 4/2, Anoopshahr Road, Front of Radio Colony, Jatav Wali Gali Jamalpur, Aligarh, Uttar Pradesh 202001',
       googleMapUrl: 'https://maps.google.com',
       socialLinks: JSON.stringify({
         linkedin: 'https://linkedin.com/company/b2b-architectural-hardware',

@@ -26,6 +26,7 @@ export const RequestQuoteForm: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -36,16 +37,105 @@ export const RequestQuoteForm: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(null);
 
-    // Simulate RFQ Processing delay
-    setTimeout(() => {
+    try {
       const refNo = `RFQ-${Math.floor(100000 + Math.random() * 900000)}`;
-      setSubmittedRef(refNo);
+
+      // 1. Primary: Save to PostgreSQL database via API endpoint
+      const dbResponse = await fetch('/api/quotes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: {
+            name: formData.fullName,
+            company: formData.companyName,
+            email: formData.businessEmail,
+            phone: formData.phoneWhatsApp,
+            country: formData.country,
+            city: formData.city || 'N/A',
+            businessType: formData.businessType,
+            companyWebsite: formData.companyWebsite || undefined,
+          },
+          message: formData.message,
+          companyWebsite: formData.companyWebsite || undefined,
+          expectedQuantity: formData.expectedQuantity || undefined,
+          requiredFinish: formData.requiredFinish || undefined,
+          requiredDeliveryDate: formData.requiredDeliveryDate || undefined,
+          items: items.map((item) => ({
+            productId: item.product.id,
+            selectedFinish: item.selectedFinish,
+            selectedSize: item.selectedSize,
+            selectedMaterial: item.selectedMaterial,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      const dbData = await dbResponse.json();
+
+      if (!dbResponse.ok || !dbData.success) {
+        throw new Error(dbData.error?.message || 'Database registration failed.');
+      }
+
+      const returnedId = dbData.data?.id ? `RFQ-${dbData.data.id.slice(-6).toUpperCase()}` : refNo;
+
+      // 2. Secondary: Trigger Web3Forms email notification service in tandem
+      try {
+        const formattedItemList = items.length > 0
+          ? items.map((item, i) => `${i + 1}. ${item.product.name} (SKU: ${item.product.sku}) - Finish: ${item.selectedFinish || 'Default'}, Size: ${item.selectedSize || 'Default'}, Qty: ${item.quantity}`).join('\n')
+          : 'No specific items attached (General RFQ Inquiry)';
+
+        const messageContent = `
+--- B2B RFQ DETAILS ---
+Reference: ${returnedId}
+Full Name: ${formData.fullName}
+Company: ${formData.companyName}
+Business Email: ${formData.businessEmail}
+Phone/WhatsApp: ${formData.phoneWhatsApp}
+Country/City: ${formData.country} / ${formData.city || 'N/A'}
+Business Type: ${formData.businessType}
+Website: ${formData.companyWebsite || 'N/A'}
+
+--- SPECIFICATION & ORDER REQUIREMENTS ---
+Expected Quantity: ${formData.expectedQuantity || 'N/A'}
+Required Finish: ${formData.requiredFinish || 'N/A'}
+Target Delivery Date: ${formData.requiredDeliveryDate || 'N/A'}
+
+--- REQUESTED CATALOG PRODUCTS ---
+${formattedItemList}
+
+--- CLIENT MESSAGE / CUSTOM REQUIREMENTS ---
+${formData.message || 'None provided'}
+        `.trim();
+
+        const payload = new FormData();
+        payload.append('access_key', '5c13d35f-9934-4b1e-b53b-4c469ac826ea');
+        payload.append('name', formData.fullName);
+        payload.append('email', formData.businessEmail);
+        payload.append('phone', formData.phoneWhatsApp);
+        payload.append('company', formData.companyName);
+        payload.append('subject', `[${returnedId}] New RFQ Submitted by ${formData.companyName}`);
+        payload.append('message', messageContent);
+        payload.append('from_name', 'Radiance RFQ Portal');
+
+        await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: payload,
+        });
+      } catch (emailErr) {
+        console.warn('Web3Forms notification dispatch warning:', emailErr);
+      }
+
+      setSubmittedRef(returnedId);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Something went wrong submitting your request. Please try again.');
+    } finally {
       setIsSubmitting(false);
-    }, 1200);
+    }
   };
 
   if (submittedRef) {
@@ -103,6 +193,11 @@ export const RequestQuoteForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white border border-brand-border rounded-lg p-6 sm:p-8 shadow-card space-y-8 font-sans">
+      {errorMessage && (
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-xs rounded-md">
+          {errorMessage}
+        </div>
+      )}
       
       {/* Primary Contact Details */}
       <div>

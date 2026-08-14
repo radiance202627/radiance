@@ -18,14 +18,49 @@ export default function ContactPage() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    setErrorMessage(null);
+
+    try {
+      const payload = new FormData();
+      payload.append('access_key', '5c13d35f-9934-4b1e-b53b-4c469ac826ea');
+      payload.append('name', formData.name);
+      payload.append('email', formData.email);
+      payload.append('phone', formData.phone);
+      payload.append('company', formData.company);
+      payload.append('subject', formData.subject);
+      payload.append('message', formData.message);
+      payload.append('from_name', 'Radiance Hardware Contact Form');
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: payload,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setIsSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          subject: '',
+          message: '',
+        });
+      } else {
+        setErrorMessage(data.message || 'Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      setErrorMessage('Something went wrong. Please check your network connection and try again.');
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 1000);
+    }
   };
 
   return (
@@ -55,9 +90,9 @@ export default function ContactPage() {
                 <div>
                   <strong className="text-white block font-display">Factory & Head Office</strong>
                   <p className="text-slate-400 font-light mt-0.5 leading-relaxed">
-                    [COMPANY_ADDRESS_LINE_1_PLACEHOLDER]<br />
-                    [INDUSTRIAL_EXPORT_ZONE_PLACEHOLDER]<br />
-                    [CITY_COUNTRY_PLACEHOLDER]
+                    Building No. 4/2, Anoopshahr Road<br />
+                    Front of Radio Colony, Jatav Wali Gali Jamalpur<br />
+                    Aligarh, Uttar Pradesh - 202001, India
                   </p>
                 </div>
               </div>
@@ -128,6 +163,11 @@ export default function ContactPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
+              {errorMessage && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-md">
+                  {errorMessage}
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-semibold text-brand-dark mb-1">

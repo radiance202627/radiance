@@ -26,12 +26,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       return apiError('Validation failed', 400, 'INVALID_INPUT', validation.error.format());
     }
 
-    const { status, notes } = validation.data;
-    const updated = await updateQuoteStatus(params.id, status, notes);
+    const { status, notes, adminNotes, assignedAdminId } = validation.data;
+    const updated = await updateQuoteStatus(params.id, status, notes, adminNotes, assignedAdminId);
     return apiSuccess(updated);
   } catch (error) {
     return handleApiError(error);
   }
+}
+
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+  return PUT(request, { params });
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {

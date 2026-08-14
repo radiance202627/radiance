@@ -108,13 +108,6 @@ function LoginForm() {
         </div>
       </form>
 
-      <div className="mt-8 pt-6 border-t border-stone-800/80 text-center">
-        <p className="text-xs text-stone-500">
-          Demo Super Admin credentials:{' '}
-          <span className="text-amber-400 font-mono">admin@hardware.com</span> /{' '}
-          <span className="text-amber-400 font-mono">Admin@123456</span>
-        </p>
-      </div>
     </div>
   );
 }

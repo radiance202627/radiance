@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { QuoteBadge } from '@/components/quote/QuoteBadge';
 import { Logo } from '@/components/ui/Logo';
-import { Search, Menu, X, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { categories } from '@/data/categories';
 
 export const Header: React.FC = () => {
@@ -35,31 +35,6 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-stone-950/95 backdrop-blur-xl text-stone-100 border-b border-stone-800/80 shadow-2xl">
-      {/* Top B2B Announcement Bar */}
-      <div className="bg-[#0c0a09] text-stone-400 text-[11px] py-2 px-4 border-b border-white/[0.05] font-sans">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 font-medium text-stone-300 tracking-[0.14em] uppercase text-[10px]">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              European B2B Architectural Hardware Manufacturer
-            </span>
-            <span className="hidden md:inline-block w-1 h-1 rounded-full bg-amber-500/30" />
-            <span className="hidden md:inline text-stone-400 text-[10px] tracking-[0.12em] uppercase">
-              Custom Finishes & Architectural Support
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-[10px] font-medium tracking-[0.14em] uppercase">
-            <Link href="/request-quote" className="hover:text-amber-400 transition-colors">
-              Submit RFQ
-            </Link>
-            <span className="w-1 h-1 rounded-full bg-amber-500/30" />
-            <Link href="/contact" className="hover:text-amber-400 transition-colors">
-              Trade Enquiries
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
