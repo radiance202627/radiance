@@ -98,39 +98,39 @@ export const productSchema = z.object({
 });
 
 export const customerSchema = z.object({
-  name: z.string().min(2, 'Customer name is required'),
-  company: z.string().min(2, 'Company name is required'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().min(5, 'Phone number is required'),
-  country: z.string().min(2, 'Country is required'),
-  city: z.string().min(2, 'City is required'),
-  businessType: z.string().min(2, 'Business type is required'),
-  companyWebsite: z.string().optional(),
-  notes: z.string().optional(),
+  name: z.string().trim().min(2, 'Customer name is required'),
+  company: z.string().trim().min(2, 'Company name is required'),
+  email: z.string().trim().email('Invalid email address'),
+  phone: z.string().trim().min(5, 'Phone number is required'),
+  country: z.string().trim().min(2, 'Country is required'),
+  city: z.string().trim().min(2, 'City is required'),
+  businessType: z.string().trim().min(2, 'Business type is required'),
+  companyWebsite: z.string().trim().optional().nullable().or(z.literal('')),
+  notes: z.string().trim().optional().nullable().or(z.literal('')),
 });
 
 export const quoteItemSchema = z.object({
-  productId: z.string().min(1, 'Product ID is required'),
-  variantId: z.string().optional(),
-  selectedFinish: z.string().optional(),
-  selectedSize: z.string().optional(),
-  selectedMaterial: z.string().optional(),
+  productId: z.string().trim().min(1, 'Product ID is required'),
+  variantId: z.string().trim().optional().nullable().or(z.literal('')),
+  selectedFinish: z.string().trim().optional().nullable().or(z.literal('')),
+  selectedSize: z.string().trim().optional().nullable().or(z.literal('')),
+  selectedMaterial: z.string().trim().optional().nullable().or(z.literal('')),
   quantity: z.number().int().min(1, 'Quantity must be at least 1').default(1),
-  notes: z.string().optional(),
+  notes: z.string().trim().optional().nullable().or(z.literal('')),
 });
 
 export const quoteRequestSchema = z.object({
   customer: customerSchema,
   status: z.enum(['NEW', 'CONTACTED', 'QUOTATION_SENT', 'NEGOTIATION', 'WON', 'LOST']).default('NEW'),
-  notes: z.string().optional(),
-  adminNotes: z.string().optional(),
-  assignedAdminId: z.string().optional(),
-  message: z.string().optional(),
-  companyWebsite: z.string().optional(),
-  expectedQuantity: z.string().optional(),
-  requiredFinish: z.string().optional(),
-  requiredDeliveryDate: z.string().optional(),
-  additionalRequirements: z.string().optional(),
+  notes: z.string().trim().optional().nullable().or(z.literal('')),
+  adminNotes: z.string().trim().optional().nullable().or(z.literal('')),
+  assignedAdminId: z.string().trim().optional().nullable().or(z.literal('')),
+  message: z.string().trim().optional().nullable().or(z.literal('')),
+  companyWebsite: z.string().trim().optional().nullable().or(z.literal('')),
+  expectedQuantity: z.string().trim().optional().nullable().or(z.literal('')),
+  requiredFinish: z.string().trim().optional().nullable().or(z.literal('')),
+  requiredDeliveryDate: z.string().trim().optional().nullable().or(z.literal('')),
+  additionalRequirements: z.string().trim().optional().nullable().or(z.literal('')),
   items: z.array(quoteItemSchema).min(1, 'At least one quote item is required'),
 });
 

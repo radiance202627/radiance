@@ -26,14 +26,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    console.log('[API/QUOTES] 2. Parsed request body:', JSON.stringify(body, null, 2));
+    console.log('[API/QUOTES] Incoming Request Body:', JSON.stringify(body, null, 2));
 
     const validation = quoteRequestSchema.safeParse(body);
     if (!validation.success) {
-      console.error('[API/QUOTES] 3. Validation failed:', validation.error.format());
-      return apiError('Validation failed', 400, 'INVALID_INPUT', validation.error.format());
+      const formattedErrors = validation.error.format();
+      console.error('[API/QUOTES] Zod Validation Failed!');
+      console.error('[API/QUOTES] Formatted Error Details:', JSON.stringify(formattedErrors, null, 2));
+      return apiError('Validation failed', 400, 'INVALID_INPUT', formattedErrors);
     }
-    console.log('[API/QUOTES] 3. Request validation passed successfully.');
+    console.log('[API/QUOTES] Request validation passed successfully.');
 
     console.log('[API/QUOTES] 4. Calling createQuoteRequest()...');
     const quote = await createQuoteRequest(validation.data as any);
