@@ -6,6 +6,8 @@ import { getProducts } from '@/lib/services/productService';
 import { getCollections } from '@/lib/services/collectionService';
 import { CatalogClient } from '../../CatalogClient';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { generateCollectionSchema, getCanonicalUrl } from '@/lib/seo/schema';
 
 export async function generateMetadata({
   params,
@@ -14,9 +16,32 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const result = await getSubcategoryBySlug(params.category, params.subcategory);
   if (!result) return { title: 'Subcategory Not Found' };
+
+  const canonicalUrl = getCanonicalUrl(`/products/${result.category.slug}/${result.subcategory.slug}`);
+
   return {
-    title: `${result.subcategory.name} - ${result.category.name} | B2B Architectural Catalog`,
+    title: `${result.subcategory.name} - ${result.category.name} | Radiance Hardware`,
     description: result.subcategory.description,
+    keywords: [
+      result.subcategory.name,
+      result.category.name,
+      'Architectural Hardware Exporter',
+      'Solid Brass Ironmongery',
+    ],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      type: 'website',
+      url: canonicalUrl,
+      title: `${result.subcategory.name} (${result.category.name}) | Radiance Architectural Hardware`,
+      description: result.subcategory.description,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${result.subcategory.name} | Radiance Hardware`,
+      description: result.subcategory.description,
+    },
   };
 }
 
@@ -39,8 +64,16 @@ export default async function SubcategoryPage({
     (p) => p.categorySlug === category.slug && p.subcategorySlug === subcategory.slug
   );
 
+  const collectionSchema = generateCollectionSchema(
+    `${subcategory.name} (${category.name})`,
+    subcategory.description,
+    `/products/${category.slug}/${subcategory.slug}`,
+    subcategoryProducts
+  );
+
   return (
     <div className="space-y-8 pb-16 font-sans">
+      <JsonLd data={collectionSchema} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <Breadcrumbs
           items={[

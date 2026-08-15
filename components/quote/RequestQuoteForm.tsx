@@ -169,37 +169,37 @@ ${formData.message || 'None provided'}
 
   if (submittedRef) {
     return (
-      <div className="bg-white border border-brand-border rounded-lg p-8 text-center max-w-2xl mx-auto shadow-elevated my-8 font-sans">
+      <div className="bg-[#F4F2ED] border border-[#E5E2DA] rounded-2xl p-8 text-center max-w-2xl mx-auto shadow-sm my-8 font-sans">
         <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-200">
           <CheckCircle2 className="w-10 h-10" />
         </div>
         
-        <span className="text-xs font-mono text-slate-500 uppercase tracking-widest block font-semibold">
+        <span className="text-xs font-mono text-[#666666] uppercase tracking-widest block font-semibold">
           Reference Number: {submittedRef}
         </span>
         
-        <h2 className="font-display font-bold text-2xl text-brand-dark mt-1 mb-3">
+        <h2 className="font-display font-bold text-2xl text-[#222222] mt-1 mb-3">
           RFQ Enquiry Submitted Successfully!
         </h2>
 
-        <p className="text-xs md:text-sm text-brand-text-muted leading-relaxed max-w-lg mx-auto mb-6">
-          Thank you, <strong className="text-brand-dark">{formData.fullName}</strong>. Our B2B export and technical estimation division at <strong className="text-brand-dark">{formData.companyName}</strong> has received your Request for Quote.
+        <p className="text-xs md:text-sm text-[#666666] leading-relaxed max-w-lg mx-auto mb-6">
+          Thank you, <strong className="text-[#222222]">{formData.fullName}</strong>. Our B2B export and technical estimation division at <strong className="text-[#222222]">{formData.companyName}</strong> has received your Request for Quote.
         </p>
 
-        <div className="bg-brand-slate rounded border border-slate-200 p-4 text-left text-xs mb-6 space-y-2">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-            <span className="font-semibold text-brand-dark uppercase tracking-wider font-display">
+        <div className="bg-[#FAF9F6] rounded-xl border border-[#E5E2DA] p-4 text-left text-xs mb-6 space-y-2">
+          <div className="flex items-center justify-between border-b border-[#E5E2DA] pb-2">
+            <span className="font-semibold text-[#222222] uppercase tracking-wider font-display">
               Submission Summary ({items.length} Products)
             </span>
-            <span className="text-slate-500 font-mono">{new Date().toLocaleDateString()}</span>
+            <span className="text-[#666666] font-mono">{new Date().toLocaleDateString()}</span>
           </div>
           <ul className="space-y-1.5 pt-1 max-h-40 overflow-y-auto">
             {items.map((item) => (
-              <li key={item.id} className="flex items-center justify-between text-slate-700">
+              <li key={item.id} className="flex items-center justify-between text-[#666666]">
                 <span className="truncate pr-2">
-                  • <strong>{item.product.name}</strong> ({item.selectedFinish}, {item.selectedSize})
+                  • <strong className="text-[#222222]">{item.product.name}</strong> ({item.selectedFinish}, {item.selectedSize})
                 </span>
-                <span className="font-mono bg-white px-2 py-0.5 rounded border border-slate-200 text-[11px]">
+                <span className="font-mono bg-[#F4F2ED] px-2 py-0.5 rounded-md border border-[#E5E2DA] text-[11px] text-[#222222]">
                   Qty: {item.quantity}
                 </span>
               </li>
@@ -211,7 +211,7 @@ ${formData.message || 'None provided'}
           <Link
             href="/products"
             onClick={() => clearQuote()}
-            className="w-full sm:w-auto px-6 py-3 bg-brand-brass hover:bg-brand-brass-dark text-white font-display text-xs font-semibold uppercase tracking-wider rounded shadow transition-all"
+            className="w-full sm:w-auto px-6 py-3 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] font-display text-xs font-semibold uppercase tracking-wider rounded-xl shadow-sm transition-all"
           >
             Continue Catalog Browsing
           </Link>
@@ -221,22 +221,22 @@ ${formData.message || 'None provided'}
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-brand-border rounded-lg p-6 sm:p-8 shadow-card space-y-8 font-sans">
+    <form onSubmit={handleSubmit} className="bg-[#F4F2ED] border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-8 font-sans">
       {errorMessage && (
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-xs rounded-md">
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
           {errorMessage}
         </div>
       )}
       
       {/* Primary Contact Details */}
       <div>
-        <h3 className="font-display font-bold text-base text-brand-dark uppercase tracking-wider pb-2 border-b border-slate-200 mb-4 flex items-center gap-2">
-          <Building className="w-4 h-4 text-brand-brass" /> Business Contact Information
+        <h3 className="font-display font-bold text-base text-[#222222] uppercase tracking-wider pb-2 border-b border-[#E5E2DA] mb-4 flex items-center gap-2">
+          <Building className="w-4 h-4 text-[#B08D57]" /> Business Contact Information
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Full Name *
             </label>
             <input
@@ -246,12 +246,12 @@ ${formData.message || 'None provided'}
               value={formData.fullName}
               onChange={handleChange}
               placeholder="e.g. Alexander Wright"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Company Name *
             </label>
             <input
@@ -261,12 +261,12 @@ ${formData.message || 'None provided'}
               value={formData.companyName}
               onChange={handleChange}
               placeholder="e.g. Apex Architectural Hardware Ltd"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Business Email *
             </label>
             <input
@@ -276,12 +276,12 @@ ${formData.message || 'None provided'}
               value={formData.businessEmail}
               onChange={handleChange}
               placeholder="e.g. procurement@apex-hardware.com"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Phone / WhatsApp Number *
             </label>
             <input
@@ -291,12 +291,12 @@ ${formData.message || 'None provided'}
               value={formData.phoneWhatsApp}
               onChange={handleChange}
               placeholder="e.g. +1 555 234 5678"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Country *
             </label>
             <input
@@ -306,12 +306,12 @@ ${formData.message || 'None provided'}
               value={formData.country}
               onChange={handleChange}
               placeholder="e.g. United Kingdom / United States / UAE"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               City
             </label>
             <input
@@ -320,12 +320,12 @@ ${formData.message || 'None provided'}
               value={formData.city}
               onChange={handleChange}
               placeholder="e.g. London / New York / Dubai"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Company Website
             </label>
             <input
@@ -334,19 +334,19 @@ ${formData.message || 'None provided'}
               value={formData.companyWebsite}
               onChange={handleChange}
               placeholder="e.g. www.yourcompany.com"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Business Type *
             </label>
             <select
               name="businessType"
               value={formData.businessType}
               onChange={handleChange}
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] focus:outline-none focus:border-[#B08D57]"
             >
               <option value="Hardware Distributor">Hardware Distributor</option>
               <option value="Architect">Architect / Specification Office</option>
@@ -363,13 +363,13 @@ ${formData.message || 'None provided'}
 
       {/* Optional Specific B2B Project Details */}
       <div>
-        <h3 className="font-display font-bold text-base text-brand-dark uppercase tracking-wider pb-2 border-b border-slate-200 mb-4 flex items-center gap-2">
-          <PackageCheck className="w-4 h-4 text-brand-brass" /> Optional Order & Specification Requirements
+        <h3 className="font-display font-bold text-base text-[#222222] uppercase tracking-wider pb-2 border-b border-[#E5E2DA] mb-4 flex items-center gap-2">
+          <PackageCheck className="w-4 h-4 text-[#B08D57]" /> Optional Order & Specification Requirements
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Expected Total Order Quantity
             </label>
             <input
@@ -378,12 +378,12 @@ ${formData.message || 'None provided'}
               value={formData.expectedQuantity}
               onChange={handleChange}
               placeholder="e.g. 500 sets / 1 Full Container"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Required Custom Finish (If any)
             </label>
             <input
@@ -392,12 +392,12 @@ ${formData.message || 'None provided'}
               value={formData.requiredFinish}
               onChange={handleChange}
               placeholder="e.g. Custom PVD Gunmetal / Satin Brass"
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-brand-dark mb-1">
+            <label className="block font-semibold text-[#222222] mb-1">
               Target Delivery Date
             </label>
             <input
@@ -405,7 +405,7 @@ ${formData.message || 'None provided'}
               name="requiredDeliveryDate"
               value={formData.requiredDeliveryDate}
               onChange={handleChange}
-              className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
+              className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl px-3 py-2 text-[#222222] focus:outline-none focus:border-[#B08D57]"
             />
           </div>
         </div>
@@ -413,7 +413,7 @@ ${formData.message || 'None provided'}
 
       {/* Message / Custom Requirements */}
       <div className="text-xs">
-        <label className="block font-semibold text-brand-dark mb-1">
+        <label className="block font-semibold text-[#222222] mb-1">
           Project Requirements & Message *
         </label>
         <textarea
@@ -423,7 +423,7 @@ ${formData.message || 'None provided'}
           value={formData.message}
           onChange={handleChange}
           placeholder="Specify any custom branding, door preparation specs, packaging requests, export documentation needed, or destination port details..."
-          className="w-full bg-brand-slate border border-slate-200 rounded p-3 text-brand-dark focus:outline-none focus:border-brand-brass leading-relaxed"
+          className="w-full bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl p-3 text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57] leading-relaxed"
         />
       </div>
 
@@ -432,7 +432,7 @@ ${formData.message || 'None provided'}
         <button
           type="submit"
           disabled={isSubmitting || items.length === 0}
-          className="w-full py-4 bg-brand-brass hover:bg-brand-brass-dark text-white font-display text-sm font-bold uppercase tracking-widest rounded shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full py-3.5 px-6 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] font-sans text-xs font-medium uppercase tracking-widest rounded-[8px] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
         >
           {isSubmitting ? (
             <span className="animate-pulse">Processing RFQ Submission...</span>
@@ -443,7 +443,7 @@ ${formData.message || 'None provided'}
             </>
           )}
         </button>
-        <p className="text-[11px] text-slate-400 text-center mt-2">
+        <p className="text-[11px] text-[#666666] text-center mt-2 font-sans">
           Submitting this RFQ does not place an order. Factory pricing and lead times will be provided by return email.
         </p>
       </div>

@@ -17,7 +17,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
     <div className="space-y-4">
       {/* Large Main Display Image */}
       <div
-        className="relative aspect-square bg-brand-slate rounded border border-brand-border overflow-hidden cursor-zoom-in group"
+        className="relative aspect-square bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] overflow-hidden cursor-zoom-in group shadow-sm"
         onClick={() => setIsZoomed(!isZoomed)}
       >
         <Image
@@ -30,7 +30,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
             isZoomed ? 'scale-150' : 'group-hover:scale-105'
           }`}
         />
-        <div className="absolute bottom-3 right-3 z-10 bg-black/60 text-white p-2 rounded-full backdrop-blur-sm opacity-80 group-hover:opacity-100 transition-opacity">
+        <div className="absolute bottom-3 right-3 z-10 bg-[#222222]/60 text-[#FAF9F6] p-2 rounded-full backdrop-blur-sm opacity-80 group-hover:opacity-100 transition-opacity">
           <ZoomIn className="w-4 h-4" />
         </div>
       </div>
@@ -42,10 +42,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, productN
             <button
               key={idx}
               onClick={() => setSelectedImage(img)}
-              className={`relative w-20 aspect-square rounded overflow-hidden border-2 transition-all flex-shrink-0 ${
+              className={`relative w-20 aspect-square rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
                 selectedImage === img
-                  ? 'border-brand-brass shadow-md scale-95'
-                  : 'border-slate-200 hover:border-slate-400 opacity-70 hover:opacity-100'
+                  ? 'border-[#B08D57] shadow-sm scale-95'
+                  : 'border-[#E5E2DA] hover:border-[#B08D57]/50 opacity-70 hover:opacity-100'
               }`}
             >
               <Image

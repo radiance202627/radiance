@@ -11,12 +11,12 @@ export const QuoteBadge: React.FC = () => {
   return (
     <Link
       href="/quote"
-      className="relative inline-flex items-center gap-2 px-4 py-2 bg-brand-brass hover:bg-brand-brass-dark text-white font-display text-xs font-semibold uppercase tracking-wider rounded transition-all duration-200 shadow-sm hover:shadow"
+      className="relative inline-flex items-center gap-2 px-4 py-2.5 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] font-sans text-xs font-medium uppercase tracking-wider rounded-[8px] transition-colors duration-200"
     >
-      <FileText className="w-4 h-4" />
+      <FileText className="w-3.5 h-3.5" />
       <span>Request a Quote</span>
       {totalItemsCount > 0 && (
-        <span className="ml-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-bold bg-white text-brand-dark rounded-full">
+        <span className="ml-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-semibold bg-[#FAF9F6] text-[#222222] rounded-full">
           {totalItemsCount}
         </span>
       )}

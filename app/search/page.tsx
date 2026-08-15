@@ -4,8 +4,12 @@ import { searchProducts } from '@/lib/services/productService';
 import { SearchClient } from './SearchClient';
 
 export const metadata: Metadata = {
-  title: 'Search Catalog | B2B Architectural Hardware',
+  title: 'Search Catalog | Radiance Architectural Hardware',
   description: 'Search architectural hardware catalog by product name, SKU, material, and finish.',
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 interface SearchPageProps {

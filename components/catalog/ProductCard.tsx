@@ -39,24 +39,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="group bg-stone-900 border border-stone-800 hover:border-amber-500/30 rounded-2xl shadow-xl transition-all duration-500 flex flex-col h-full overflow-hidden font-sans relative">
+    <div className="group bg-[#F4F2ED] border border-[#E5E2DA] hover:border-[#B08D57]/40 rounded-2xl shadow-sm transition-all duration-500 flex flex-col h-full overflow-hidden font-sans relative">
       {/* Product Image Stage */}
-      <div className="relative aspect-[4/3] bg-stone-950 overflow-hidden p-4 flex items-center justify-center">
+      <div className="relative aspect-[4/3] bg-[#FAF9F6] overflow-hidden p-4 flex items-center justify-center border-b border-[#E5E2DA]">
         {/* Top Badges */}
         <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-          <span className="text-[10px] font-medium uppercase tracking-wider text-stone-300 bg-stone-900/90 px-2.5 py-1 rounded-md border border-stone-800 backdrop-blur-sm">
+          <span className="text-[10px] font-medium uppercase tracking-wider text-[#666666] bg-[#F4F2ED]/90 px-2.5 py-1 rounded-md border border-[#E5E2DA] backdrop-blur-sm">
             {product.subcategoryName}
           </span>
         </div>
 
-        <span className="absolute top-3 right-3 z-10 font-mono text-[10px] font-semibold text-amber-400 bg-stone-900/90 px-2 py-0.5 rounded-md border border-stone-800 backdrop-blur-sm">
+        <span className="absolute top-3 right-3 z-10 font-mono text-[10px] font-semibold text-[#B08D57] bg-[#F4F2ED]/90 px-2 py-0.5 rounded-md border border-[#E5E2DA] backdrop-blur-sm">
           {product.sku}
         </span>
 
         <Link href={`/product/${product.slug}`} className="block w-full h-full relative group">
           <Image
             src={product.images[0] || 'https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=600&auto=format&fit=crop'}
-            alt={product.name}
+            alt={`${product.name} - ${product.material} ${selectedFinish || product.finishes[0] || ''} ${product.subcategoryName} Fitting`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover object-center img-luxury-zoom"
@@ -67,28 +67,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Product Content Details */}
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
-          <div className="flex items-center justify-between text-xs text-stone-400 mb-1.5">
-            <span className="text-[11px] font-medium text-amber-400 font-sans flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-400" /> {product.material}
+          <div className="flex items-center justify-between text-xs text-[#666666] mb-1.5">
+            <span className="text-[11px] font-medium text-[#B08D57] font-sans flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#B08D57]" /> {product.material}
             </span>
           </div>
 
-          <h3 className="font-serif font-bold text-stone-100 text-lg sm:text-xl leading-snug group-hover:text-amber-400 transition-colors line-clamp-2">
+          <h3 className="font-serif font-bold text-[#222222] text-lg sm:text-xl leading-snug group-hover:text-[#B08D57] transition-colors line-clamp-2">
             <Link href={`/product/${product.slug}`}>{product.name}</Link>
           </h3>
 
-          <p className="text-xs text-stone-400 mt-2 line-clamp-2 leading-relaxed font-normal">
+          <p className="text-xs text-[#666666] mt-2 line-clamp-2 leading-relaxed font-normal">
             {product.shortDescription}
           </p>
         </div>
 
         {/* Finish Swatches & Size Selection Bar */}
-        <div className="pt-3 border-t border-stone-800/80 space-y-2 text-xs">
+        <div className="pt-3 border-t border-[#E5E2DA] space-y-2 text-xs">
           {product.finishes.length > 0 && (
             <div className="space-y-1">
-              <div className="flex items-center justify-between text-[10px] text-stone-400 uppercase tracking-wider font-semibold">
+              <div className="flex items-center justify-between text-[10px] text-[#666666] uppercase tracking-wider font-semibold">
                 <span>Finish:</span>
-                <span className="text-stone-200 font-medium">{selectedFinish}</span>
+                <span className="text-[#222222] font-medium">{selectedFinish}</span>
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {product.finishes.map((f) => {
@@ -100,7 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                       onClick={() => setSelectedFinish(f)}
                       title={f}
                       className={`w-4 h-4 rounded-full border transition-all ${getFinishColorSwatch(f)} ${
-                        isSel ? 'scale-110 ring-2 ring-amber-400 ring-offset-1 ring-offset-stone-900' : 'opacity-70 hover:opacity-100'
+                        isSel ? 'scale-110 ring-2 ring-[#B08D57] ring-offset-1 ring-offset-[#F4F2ED]' : 'opacity-70 hover:opacity-100'
                       }`}
                     />
                   );
@@ -111,11 +111,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           {product.sizes.length > 0 && (
             <div className="flex items-center justify-between text-[11px] pt-1">
-              <span className="text-[10px] text-stone-400 uppercase tracking-wider font-semibold">Size:</span>
+              <span className="text-[10px] text-[#666666] uppercase tracking-wider font-semibold">Size:</span>
               <select
                 value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
-                className="text-[11px] bg-stone-950 border border-stone-800 text-stone-200 rounded-lg px-2 py-1 focus:outline-none focus:border-amber-500/50 font-medium"
+                className="text-[11px] bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-2 py-1 focus:outline-none focus:border-[#B08D57] font-medium"
               >
                 {product.sizes.map((s) => (
                   <option key={s} value={s}>
@@ -131,7 +131,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="grid grid-cols-2 gap-2 pt-2">
           <Link
             href={`/product/${product.slug}`}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 bg-stone-950 hover:bg-stone-800 text-stone-200 text-xs font-semibold rounded-xl border border-stone-800 transition-colors text-center"
+            className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#FAF9F6] hover:bg-[#E5E2DA] text-[#222222] text-xs font-sans font-medium rounded-[8px] border border-[#E5E2DA] transition-colors text-center"
           >
             <Eye className="w-3.5 h-3.5" />
             <span>Details</span>
@@ -139,10 +139,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           <button
             onClick={handleAddToQuote}
-            className={`flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl transition-all duration-300 ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-sans font-medium rounded-[8px] transition-colors duration-200 ${
               isAdded
-                ? 'bg-emerald-500 text-white shadow-md'
-                : 'bg-amber-400 hover:bg-amber-300 text-stone-950 font-semibold shadow-md'
+                ? 'bg-emerald-600 text-[#FAF9F6]'
+                : 'bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6]'
             }`}
           >
             {isAdded ? (

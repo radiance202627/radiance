@@ -69,18 +69,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex font-sans">
+    <div className="min-h-screen bg-[#FAF9F6] text-[#222222] flex font-sans">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 bg-stone-900 border-r border-stone-800 flex-shrink-0">
-        <div className="p-6 border-b border-stone-800 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 bg-[#F4F2ED] border-r border-[#E5E2DA] flex-shrink-0">
+        <div className="p-6 border-b border-[#E5E2DA] flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-[#B08D57]/10 border border-[#B08D57]/30 flex items-center justify-center text-[#B08D57]">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="font-serif font-bold text-lg text-stone-100 leading-tight">
+            <h1 className="font-serif font-bold text-lg text-[#222222] leading-tight">
               Hardware Admin
             </h1>
-            <span className="text-xs text-stone-400 font-mono uppercase tracking-wider">
+            <span className="text-xs text-[#666666] font-mono uppercase tracking-wider">
               Control Panel
             </span>
           </div>
@@ -96,35 +96,35 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 href={item.href}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition ${
                   isActive
-                    ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                    : 'text-stone-400 hover:text-stone-200 hover:bg-stone-800/60'
+                    ? 'bg-[#B08D57]/15 text-[#B08D57] border border-[#B08D57]/30 font-semibold shadow-sm'
+                    : 'text-[#666666] hover:text-[#222222] hover:bg-[#FAF9F6]'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-stone-500'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#B08D57]' : 'text-[#666666]'}`} />
                   <span>{item.label}</span>
                 </div>
-                {isActive && <ChevronRight className="w-4 h-4 text-amber-400" />}
+                {isActive && <ChevronRight className="w-4 h-4 text-[#B08D57]" />}
               </Link>
             );
           })}
         </nav>
 
         {/* User Profile & Logout Footer */}
-        <div className="p-4 border-t border-stone-800 bg-stone-900/50">
+        <div className="p-4 border-t border-[#E5E2DA] bg-[#FAF9F6]/50">
           <div className="flex items-center justify-between">
             <div className="truncate pr-2">
-              <p className="text-sm font-semibold text-stone-200 truncate">
+              <p className="text-sm font-semibold text-[#222222] truncate">
                 {user?.name || 'Super Admin'}
               </p>
-              <p className="text-xs text-amber-400/90 font-mono uppercase tracking-wider">
+              <p className="text-xs text-[#B08D57] font-mono uppercase tracking-wider">
                 {user?.role || 'SUPER_ADMIN'}
               </p>
             </div>
             <button
               onClick={handleLogout}
               title="Sign out"
-              className="p-2 rounded-xl text-stone-400 hover:text-red-400 hover:bg-stone-800/80 transition"
+              className="p-2 rounded-xl text-[#666666] hover:text-red-600 hover:bg-red-50 transition"
             >
               <LogOut className="w-5 h-5" />
             </button>
@@ -136,18 +136,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-stone-950/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-[#222222]/40 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="relative flex flex-col w-72 max-w-full bg-stone-900 border-r border-stone-800 z-10">
-            <div className="p-6 border-b border-stone-800 flex items-center justify-between">
+          <aside className="relative flex flex-col w-72 max-w-full bg-[#F4F2ED] border-r border-[#E5E2DA] z-10">
+            <div className="p-6 border-b border-[#E5E2DA] flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ShieldCheck className="w-6 h-6 text-amber-400" />
-                <span className="font-serif font-bold text-stone-100">Hardware Admin</span>
+                <ShieldCheck className="w-6 h-6 text-[#B08D57]" />
+                <span className="font-serif font-bold text-[#222222]">Hardware Admin</span>
               </div>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-2 text-stone-400 hover:text-stone-200"
+                className="p-2 text-[#666666] hover:text-[#222222]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -163,8 +163,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition ${
                       isActive
-                        ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                        : 'text-stone-400 hover:text-stone-200 hover:bg-stone-800/60'
+                        ? 'bg-[#B08D57]/15 text-[#B08D57] border border-[#B08D57]/30'
+                        : 'text-[#666666] hover:text-[#222222] hover:bg-[#FAF9F6]'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -173,14 +173,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 );
               })}
             </nav>
-            <div className="p-4 border-t border-stone-800 flex items-center justify-between">
+            <div className="p-4 border-t border-[#E5E2DA] flex items-center justify-between">
               <div className="truncate">
-                <p className="text-sm font-semibold text-stone-200">{user?.name || 'Super Admin'}</p>
-                <p className="text-xs text-amber-400 font-mono">{user?.role || 'SUPER_ADMIN'}</p>
+                <p className="text-sm font-semibold text-[#222222]">{user?.name || 'Super Admin'}</p>
+                <p className="text-xs text-[#B08D57] font-mono">{user?.role || 'SUPER_ADMIN'}</p>
               </div>
               <button
                 onClick={handleLogout}
-                className="p-2 text-stone-400 hover:text-red-400"
+                className="p-2 text-[#666666] hover:text-red-600"
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -192,14 +192,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile Header Bar */}
-        <header className="lg:hidden bg-stone-900 border-b border-stone-800 p-4 flex items-center justify-between">
+        <header className="lg:hidden bg-[#F4F2ED] border-b border-[#E5E2DA] p-4 flex items-center justify-between">
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-2 text-stone-400 hover:text-stone-200"
+            className="p-2 text-[#666666] hover:text-[#222222]"
           >
             <Menu className="w-6 h-6" />
           </button>
-          <span className="font-serif font-bold text-stone-100">Architectural Hardware</span>
+          <span className="font-serif font-bold text-[#222222]">Architectural Hardware</span>
           <div className="w-6" />
         </header>
 

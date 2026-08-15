@@ -130,7 +130,7 @@ export const CatalogClient: React.FC<CatalogClientProps> = ({
       />
 
       {/* Page Header Banner */}
-      <div className="bg-white rounded-lg border border-brand-border p-6 sm:p-8 shadow-sm">
+      <div className="bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] p-6 sm:p-8 shadow-sm">
         <SectionHeading
           subtitle="B2B Architectural Hardware Catalog"
           title={activeCategoryObj ? activeCategoryObj.name : 'All Architectural Products'}
@@ -172,17 +172,17 @@ export const CatalogClient: React.FC<CatalogClientProps> = ({
         <div className="lg:col-span-3 space-y-6">
           
           {/* Search Bar & Mobile Filter Trigger Bar */}
-          <div className="bg-white rounded-lg border border-brand-border p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
             
             {/* Search Input */}
             <div className="relative w-full sm:w-80">
-              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-[#666666]" />
               <input
                 type="text"
                 placeholder="Search products or SKU..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-brand-slate border border-slate-200 rounded text-xs text-brand-dark focus:outline-none focus:border-brand-brass"
+                className="w-full pl-9 pr-4 py-2 bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl text-xs text-[#222222] placeholder-[#666666] focus:outline-none focus:border-[#B08D57]"
               />
             </div>
 
@@ -190,20 +190,20 @@ export const CatalogClient: React.FC<CatalogClientProps> = ({
               {/* Mobile Filter Button */}
               <button
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-1.5 px-3 py-2 bg-brand-slate text-brand-dark text-xs font-semibold uppercase tracking-wider rounded border border-slate-300"
+                className="lg:hidden flex items-center gap-1.5 px-3 py-2 bg-[#FAF9F6] text-[#222222] text-xs font-semibold uppercase tracking-wider rounded-xl border border-[#E5E2DA]"
               >
-                <SlidersHorizontal className="w-4 h-4 text-brand-brass" />
+                <SlidersHorizontal className="w-4 h-4 text-[#B08D57]" />
                 <span>Filters</span>
               </button>
 
               {/* Sort Selector */}
               <div className="flex items-center gap-2 text-xs">
-                <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 hidden sm:inline" />
-                <span className="text-slate-500 font-medium hidden sm:inline">Sort:</span>
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#666666] hidden sm:inline" />
+                <span className="text-[#666666] font-medium hidden sm:inline">Sort:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-brand-slate border border-slate-200 text-brand-dark text-xs rounded px-3 py-2 focus:outline-none focus:border-brand-brass font-medium"
+                  className="bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-[#B08D57] font-medium"
                 >
                   <option value="featured">Featured First</option>
                   <option value="name-asc">Name: A to Z</option>
@@ -216,14 +216,14 @@ export const CatalogClient: React.FC<CatalogClientProps> = ({
           </div>
 
           {/* Results Summary Bar */}
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+          <div className="flex items-center justify-between text-xs text-[#666666] px-1">
             <span>
               Showing <strong>{filteredProducts.length}</strong> architectural products
             </span>
             {(selectedCategory || selectedMaterial || selectedFinish || searchQuery) && (
               <button
                 onClick={resetFilters}
-                className="text-brand-brass font-semibold hover:underline"
+                className="text-[#B08D57] font-semibold hover:underline"
               >
                 Clear all active filters
               </button>

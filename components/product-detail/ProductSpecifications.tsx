@@ -29,13 +29,13 @@ export const ProductSpecifications: React.FC<ProductSpecificationsProps> = ({
   };
 
   return (
-    <div className="space-y-6 pt-8 border-t border-slate-200">
+    <div className="space-y-6 pt-8 border-t border-[#E5E2DA]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="font-display font-bold text-lg text-brand-dark uppercase tracking-wider">
+          <h3 className="font-serif font-bold text-xl text-[#222222] tracking-tight">
             Technical Specifications
           </h3>
-          <p className="text-xs text-brand-text-muted">
+          <p className="text-xs text-[#666666] font-sans font-normal mt-0.5">
             Dimensional data and engineering compliance details
           </p>
         </div>
@@ -43,7 +43,7 @@ export const ProductSpecifications: React.FC<ProductSpecificationsProps> = ({
         <button
           onClick={handleDownloadSpec}
           disabled={downloading}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-slate hover:bg-slate-200 text-brand-dark text-xs font-display font-semibold uppercase tracking-wider rounded border border-slate-300 transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#F4F2ED] hover:bg-[#E5E2DA] text-[#222222] text-xs font-sans font-medium uppercase tracking-wider rounded-[8px] border border-[#E5E2DA] transition-colors"
         >
           {downloading ? (
             <span className="animate-pulse">Generating Spec PDF...</span>
@@ -54,7 +54,7 @@ export const ProductSpecifications: React.FC<ProductSpecificationsProps> = ({
             </>
           ) : (
             <>
-              <Download className="w-4 h-4 text-brand-brass" />
+              <Download className="w-4 h-4 text-[#B08D57]" />
               <span>Download Specification PDF</span>
             </>
           )}
@@ -62,26 +62,26 @@ export const ProductSpecifications: React.FC<ProductSpecificationsProps> = ({
       </div>
 
       {/* Technical Spec Table */}
-      <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+      <div className="border border-[#E5E2DA] rounded-2xl overflow-hidden bg-[#F4F2ED] shadow-sm">
         <table className="w-full text-left text-xs font-sans">
           <tbody>
-            <tr className="border-b border-slate-100 bg-slate-50/50">
-              <td className="py-3 px-4 font-semibold text-brand-dark w-1/3">Item SKU Code</td>
-              <td className="py-3 px-4 font-mono text-slate-700">{sku}</td>
+            <tr className="border-b border-[#E5E2DA] bg-[#FAF9F6]">
+              <td className="py-3 px-4 font-semibold text-[#222222] w-1/3">Item SKU Code</td>
+              <td className="py-3 px-4 font-mono text-[#666666]">{sku}</td>
             </tr>
-            <tr className="border-b border-slate-100">
-              <td className="py-3 px-4 font-semibold text-brand-dark">Primary Material</td>
-              <td className="py-3 px-4 text-slate-700">{material}</td>
+            <tr className="border-b border-[#E5E2DA]">
+              <td className="py-3 px-4 font-semibold text-[#222222]">Primary Material</td>
+              <td className="py-3 px-4 text-[#666666]">{material}</td>
             </tr>
             {Object.entries(specifications).map(([key, val], idx) => (
               <tr
                 key={key}
-                className={`border-b border-slate-100 ${
-                  idx % 2 === 0 ? 'bg-slate-50/30' : 'bg-white'
+                className={`border-b border-[#E5E2DA] last:border-0 ${
+                  idx % 2 === 0 ? 'bg-[#FAF9F6]' : 'bg-[#F4F2ED]'
                 }`}
               >
-                <td className="py-3 px-4 font-semibold text-brand-dark">{key}</td>
-                <td className="py-3 px-4 text-slate-700">{val}</td>
+                <td className="py-3 px-4 font-semibold text-[#222222]">{key}</td>
+                <td className="py-3 px-4 text-[#666666]">{val}</td>
               </tr>
             ))}
           </tbody>
@@ -89,14 +89,14 @@ export const ProductSpecifications: React.FC<ProductSpecificationsProps> = ({
       </div>
 
       {/* B2B Custom Engineering Note */}
-      <div className="p-4 bg-brand-slate rounded border border-brand-border flex items-start gap-3">
-        <FileText className="w-5 h-5 text-brand-brass flex-shrink-0 mt-0.5" />
-        <div className="text-xs space-y-1">
-          <h4 className="font-semibold text-brand-dark uppercase tracking-wider font-display">
-            Custom B2B Manufacturing & Finishes Available
+      <div className="p-5 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] flex items-start gap-3 shadow-sm">
+        <FileText className="w-5 h-5 text-[#B08D57] flex-shrink-0 mt-0.5" />
+        <div className="text-xs space-y-1 font-sans">
+          <h4 className="font-serif font-bold text-[#222222] tracking-tight text-sm">
+            B2B Custom Tooling & OEM Manufacturing Schedule
           </h4>
-          <p className="text-brand-text-muted leading-relaxed">
-            Need custom dimensions, PVD coatings, unlisted screw hole CTC, or private label laser branding? Our technical engineering team provides custom OEM/ODM production for architectural hardware orders.
+          <p className="text-[#666666] leading-relaxed font-normal">
+            Require custom CTC backsets, non-standard spindle sizes (7mm/8mm/9mm), PVD titanium coatings, or laser-etched brand logos? Our Aligarh foundry engineering department provides direct OEM/ODM production, CAD drawing matching, and BS EN compliance testing for commercial hardware schedules.
           </p>
         </div>
       </div>

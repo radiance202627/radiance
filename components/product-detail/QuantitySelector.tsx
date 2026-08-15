@@ -33,15 +33,15 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
 
   return (
     <div className="space-y-1.5 font-sans">
-      <label className="block text-xs font-semibold uppercase tracking-wider text-brand-dark font-display">
+      <label className="block text-xs font-semibold uppercase tracking-wider text-[#222222] font-display">
         Estimated Quantity
       </label>
-      <div className="inline-flex items-center border border-slate-300 rounded bg-white overflow-hidden shadow-sm">
+      <div className="inline-flex items-center border border-[#E5E2DA] rounded-xl bg-[#FAF9F6] overflow-hidden shadow-sm">
         <button
           type="button"
           onClick={handleDecrement}
           disabled={quantity <= min}
-          className="p-2.5 text-slate-500 hover:text-brand-dark disabled:opacity-30 hover:bg-slate-100 transition-colors"
+          className="p-2.5 text-[#666666] hover:text-[#222222] disabled:opacity-30 hover:bg-[#F4F2ED] transition-colors"
           aria-label="Decrease quantity"
         >
           <Minus className="w-3.5 h-3.5" />
@@ -51,18 +51,18 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           min={min}
           value={quantity}
           onChange={handleInputChange}
-          className="w-16 text-center text-sm font-semibold text-brand-dark py-1.5 focus:outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-16 text-center text-sm font-semibold text-[#222222] py-1.5 focus:outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         <button
           type="button"
           onClick={handleIncrement}
-          className="p-2.5 text-slate-500 hover:text-brand-dark hover:bg-slate-100 transition-colors"
+          className="p-2.5 text-[#666666] hover:text-[#222222] hover:bg-[#F4F2ED] transition-colors"
           aria-label="Increase quantity"
         >
           <Plus className="w-3.5 h-3.5" />
         </button>
       </div>
-      <span className="block text-[11px] text-slate-400">
+      <span className="block text-[11px] text-[#666666]">
         Bulk wholesale pricing calculated upon RFQ submission
       </span>
     </div>

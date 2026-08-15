@@ -14,12 +14,12 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 }) => {
   if (products.length === 0) {
     return (
-      <div className="py-16 text-center bg-white rounded-lg border border-dashed border-slate-300 p-8 my-6">
-        <PackageSearch className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-        <h3 className="font-display text-lg font-semibold text-brand-dark mb-1">
+      <div className="py-16 text-center bg-[#F4F2ED] rounded-2xl border border-dashed border-[#E5E2DA] p-8 my-6">
+        <PackageSearch className="w-12 h-12 text-[#666666] mx-auto mb-3" />
+        <h3 className="font-display text-lg font-semibold text-[#222222] mb-1">
           No Products Found
         </h3>
-        <p className="text-sm text-brand-text-muted max-w-md mx-auto">
+        <p className="text-sm text-[#666666] max-w-md mx-auto">
           {emptyMessage}
         </p>
       </div>

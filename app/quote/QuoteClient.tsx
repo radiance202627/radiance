@@ -26,7 +26,7 @@ export const QuoteClient: React.FC = () => {
       <Breadcrumbs items={[{ label: 'Quote List' }]} />
 
       {/* Header Banner */}
-      <div className="bg-white rounded-lg border border-brand-border p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <SectionHeading
           subtitle="Selected Hardware Items"
           title="Your Quote List"
@@ -35,7 +35,7 @@ export const QuoteClient: React.FC = () => {
 
         <button
           onClick={clearQuote}
-          className="text-xs font-semibold text-slate-500 hover:text-red-600 flex items-center gap-1.5 transition-colors self-end sm:self-auto"
+          className="text-xs font-semibold text-[#666666] hover:text-red-600 flex items-center gap-1.5 transition-colors self-end sm:self-auto"
         >
           <Trash2 className="w-4 h-4" /> Clear Quote List
         </button>
@@ -49,12 +49,12 @@ export const QuoteClient: React.FC = () => {
       </div>
 
       {/* Summary Action Bar */}
-      <div className="bg-brand-charcoal text-white rounded-lg p-6 sm:p-8 shadow-floating flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-border-dark">
+      <div className="bg-[#F4F2ED] text-[#222222] rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 border border-[#E5E2DA]">
         <div className="space-y-1 text-center sm:text-left">
-          <p className="font-display font-bold text-lg text-white">
+          <p className="font-display font-bold text-lg text-[#222222]">
             Ready to Submit Your Official RFQ?
           </p>
-          <p className="text-xs text-slate-300 font-light">
+          <p className="text-xs text-[#666666] font-light">
             Proceeding to the next step allows you to provide company details, required lead times, and custom packaging instructions.
           </p>
         </div>
@@ -62,14 +62,14 @@ export const QuoteClient: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
           <Link
             href="/products"
-            className="w-full sm:w-auto px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-display text-xs font-semibold uppercase tracking-wider rounded backdrop-blur-sm transition-colors text-center flex items-center justify-center gap-1.5"
+            className="w-full sm:w-auto px-6 py-3 bg-[#FAF9F6] hover:bg-[#E5E2DA] text-[#222222] font-sans text-xs font-medium uppercase tracking-wider rounded-[8px] border border-[#E5E2DA] transition-colors text-center flex items-center justify-center gap-1.5"
           >
             <ArrowLeft className="w-4 h-4" /> Continue Browsing
           </Link>
 
           <Link
             href="/request-quote"
-            className="w-full sm:w-auto px-8 py-3 bg-brand-brass hover:bg-brand-brass-dark text-white font-display text-xs font-bold uppercase tracking-widest rounded shadow transition-all text-center flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-7 py-3 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] font-sans text-xs font-medium uppercase tracking-widest rounded-[8px] transition-colors text-center flex items-center justify-center gap-2"
           >
             <FileText className="w-4 h-4" /> Request a Quote
             <ArrowRight className="w-4 h-4" />
