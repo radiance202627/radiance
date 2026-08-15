@@ -101,9 +101,9 @@ export const customerSchema = z.object({
   name: z.string().trim().min(2, 'Customer name is required'),
   company: z.string().trim().min(2, 'Company name is required'),
   email: z.string().trim().email('Invalid email address'),
-  phone: z.string().trim().min(5, 'Phone number is required'),
+  phone: z.string().trim().min(3, 'Phone number is required'),
   country: z.string().trim().min(2, 'Country is required'),
-  city: z.string().trim().min(2, 'City is required'),
+  city: z.string().trim().optional().nullable().or(z.literal('')),
   businessType: z.string().trim().min(2, 'Business type is required'),
   companyWebsite: z.string().trim().optional().nullable().or(z.literal('')),
   notes: z.string().trim().optional().nullable().or(z.literal('')),
@@ -115,7 +115,7 @@ export const quoteItemSchema = z.object({
   selectedFinish: z.string().trim().optional().nullable().or(z.literal('')),
   selectedSize: z.string().trim().optional().nullable().or(z.literal('')),
   selectedMaterial: z.string().trim().optional().nullable().or(z.literal('')),
-  quantity: z.number().int().min(1, 'Quantity must be at least 1').default(1),
+  quantity: z.coerce.number().int().min(1, 'Quantity must be at least 1').default(1),
   notes: z.string().trim().optional().nullable().or(z.literal('')),
 });
 

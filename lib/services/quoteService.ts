@@ -71,7 +71,7 @@ export async function createQuoteRequest(data: {
     email: string;
     phone: string;
     country: string;
-    city: string;
+    city?: string | null;
     businessType: string;
     companyWebsite?: string | null;
     notes?: string | null;

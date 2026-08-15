@@ -56,7 +56,7 @@ export async function findOrCreateCustomer(data: {
   email: string;
   phone: string;
   country: string;
-  city: string;
+  city?: string | null;
   businessType: string;
   companyWebsite?: string | null;
   notes?: string | null;
@@ -82,7 +82,7 @@ export async function findOrCreateCustomer(data: {
         company: data.company,
         phone: data.phone,
         country: data.country,
-        city: data.city,
+        city: data.city || 'N/A',
         businessType: data.businessType,
         companyWebsite: companyWebsite ?? existing.companyWebsite,
         notes: notes ?? existing.notes,
@@ -101,7 +101,7 @@ export async function findOrCreateCustomer(data: {
       email: emailClean,
       phone: data.phone,
       country: data.country,
-      city: data.city,
+      city: data.city || 'N/A',
       businessType: data.businessType,
       companyWebsite: companyWebsite,
       notes: notes,

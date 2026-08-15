@@ -37,6 +37,29 @@ export const RequestQuoteForm: React.FC = () => {
     });
   };
 
+  const extractValidationMessages = (details: any): string[] => {
+    if (!details || typeof details !== 'object') return [];
+    const messages: string[] = [];
+
+    const traverse = (obj: any, prefix = '') => {
+      if (!obj || typeof obj !== 'object') return;
+      if (Array.isArray(obj._errors) && obj._errors.length > 0) {
+        obj._errors.forEach((msg: string) => {
+          messages.push(prefix ? `${prefix}: ${msg}` : msg);
+        });
+      }
+      for (const key of Object.keys(obj)) {
+        if (key !== '_errors') {
+          const fieldName = key.charAt(0).toUpperCase() + key.slice(1);
+          traverse(obj[key], prefix ? `${prefix} -> ${fieldName}` : fieldName);
+        }
+      }
+    };
+
+    traverse(details);
+    return messages;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -79,6 +102,11 @@ export const RequestQuoteForm: React.FC = () => {
       const dbData = await dbResponse.json();
 
       if (!dbResponse.ok || !dbData.success) {
+        const details = dbData.error?.details;
+        const validationMsgs = extractValidationMessages(details);
+        if (validationMsgs.length > 0) {
+          throw new Error(`Validation failed: ${validationMsgs.join(' | ')}`);
+        }
         throw new Error(dbData.error?.message || 'Database registration failed.');
       }
 
@@ -301,11 +329,11 @@ ${formData.message || 'None provided'}
               Company Website
             </label>
             <input
-              type="url"
+              type="text"
               name="companyWebsite"
               value={formData.companyWebsite}
               onChange={handleChange}
-              placeholder="https://www.yourcompany.com"
+              placeholder="e.g. www.yourcompany.com"
               className="w-full bg-brand-slate border border-slate-200 rounded px-3 py-2 text-brand-dark focus:outline-none focus:border-brand-brass"
             />
           </div>
