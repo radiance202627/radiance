@@ -58,10 +58,13 @@ export async function findOrCreateCustomer(data: {
   country: string;
   city: string;
   businessType: string;
-  companyWebsite?: string;
-  notes?: string;
+  companyWebsite?: string | null;
+  notes?: string | null;
 }) {
   const emailClean = data.email.toLowerCase().trim();
+  const companyWebsite = data.companyWebsite ?? undefined;
+  const notes = data.notes ?? undefined;
+
   console.log(`[CUSTOMER_SERVICE] Finding or creating customer in DB for email: ${emailClean}`);
 
   const existing = await withDbTimeout(
@@ -81,8 +84,8 @@ export async function findOrCreateCustomer(data: {
         country: data.country,
         city: data.city,
         businessType: data.businessType,
-        companyWebsite: data.companyWebsite || existing.companyWebsite,
-        notes: data.notes || existing.notes,
+        companyWebsite: companyWebsite ?? existing.companyWebsite,
+        notes: notes ?? existing.notes,
         deletedAt: null,
       },
     });
@@ -100,8 +103,8 @@ export async function findOrCreateCustomer(data: {
       country: data.country,
       city: data.city,
       businessType: data.businessType,
-      companyWebsite: data.companyWebsite,
-      notes: data.notes,
+      companyWebsite: companyWebsite,
+      notes: notes,
     },
   });
   console.log(`[CUSTOMER_SERVICE] New Customer inserted successfully into PostgreSQL. Customer ID: ${created.id}`);

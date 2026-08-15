@@ -73,25 +73,26 @@ export async function createQuoteRequest(data: {
     country: string;
     city: string;
     businessType: string;
-    companyWebsite?: string;
+    companyWebsite?: string | null;
+    notes?: string | null;
   };
-  notes?: string;
-  adminNotes?: string;
-  assignedAdminId?: string;
-  message?: string;
-  companyWebsite?: string;
-  expectedQuantity?: string;
-  requiredFinish?: string;
-  requiredDeliveryDate?: string;
-  additionalRequirements?: string;
+  notes?: string | null;
+  adminNotes?: string | null;
+  assignedAdminId?: string | null;
+  message?: string | null;
+  companyWebsite?: string | null;
+  expectedQuantity?: string | null;
+  requiredFinish?: string | null;
+  requiredDeliveryDate?: string | null;
+  additionalRequirements?: string | null;
   items: {
     productId: string;
-    variantId?: string;
-    selectedFinish?: string;
-    selectedSize?: string;
-    selectedMaterial?: string;
+    variantId?: string | null;
+    selectedFinish?: string | null;
+    selectedSize?: string | null;
+    selectedMaterial?: string | null;
     quantity: number;
-    notes?: string;
+    notes?: string | null;
   }[];
 }) {
   console.log('[QUOTE_SERVICE] Entering createQuoteRequest()');
@@ -182,12 +183,12 @@ export async function createQuoteRequest(data: {
       console.log(`[QUOTE_SERVICE] Item #${idx + 1} resolved to DB Product ID: ${dbProduct.id}`);
       return {
         productId: dbProduct.id,
-        variantId: item.variantId || null,
-        selectedFinish: item.selectedFinish || null,
-        selectedSize: item.selectedSize || null,
-        selectedMaterial: item.selectedMaterial || null,
+        variantId: item.variantId ?? null,
+        selectedFinish: item.selectedFinish ?? null,
+        selectedSize: item.selectedSize ?? null,
+        selectedMaterial: item.selectedMaterial ?? null,
         quantity: item.quantity,
-        notes: item.notes || null,
+        notes: item.notes ?? null,
       };
     })
   );
@@ -198,15 +199,15 @@ export async function createQuoteRequest(data: {
       data: {
         customerId: customer.id,
         status: QuoteStatus.NEW,
-        notes: data.notes,
-        adminNotes: data.adminNotes,
-        assignedAdminId: data.assignedAdminId || null,
-        message: data.message,
-        companyWebsite: data.companyWebsite || data.customer.companyWebsite,
-        expectedQuantity: data.expectedQuantity,
-        requiredFinish: data.requiredFinish,
-        requiredDeliveryDate: data.requiredDeliveryDate,
-        additionalRequirements: data.additionalRequirements,
+        notes: data.notes ?? null,
+        adminNotes: data.adminNotes ?? null,
+        assignedAdminId: data.assignedAdminId ?? null,
+        message: data.message ?? null,
+        companyWebsite: data.companyWebsite ?? data.customer.companyWebsite ?? null,
+        expectedQuantity: data.expectedQuantity ?? null,
+        requiredFinish: data.requiredFinish ?? null,
+        requiredDeliveryDate: data.requiredDeliveryDate ?? null,
+        additionalRequirements: data.additionalRequirements ?? null,
         items: {
           create: resolvedItems,
         },
