@@ -11,6 +11,7 @@ import { CollectionCard } from '@/components/catalog/CollectionCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { FinishPalette } from '@/components/ui/FinishPalette';
 import { ArrowRight, ShieldCheck, Layers, Sparkles, PackageCheck, Globe2, FileText, Hammer } from 'lucide-react';
+import { TestimonialSection } from '@/components/home/TestimonialSection';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { generateWebsiteSchema, getCanonicalUrl } from '@/lib/seo/schema';
 
@@ -249,6 +250,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* GLOBAL B2B CLIENT TESTIMONIALS SECTION */}
+      <TestimonialSection />
 
       {/* FAQ & EEAT TRADE KNOWLEDGE SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
