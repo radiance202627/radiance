@@ -118,19 +118,18 @@ ${request.attachments?.map((a: any, idx: number) => `${idx + 1}. ${a.fileName} (
 
     const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '5c13d35f-9934-4b1e-b53b-4c469ac826ea';
 
+    const formData = new FormData();
+    formData.append('access_key', apiKey);
+    formData.append('name', request.name);
+    formData.append('email', request.email);
+    formData.append('phone', request.contactNumber);
+    formData.append('subject', `[${request.referenceNo}] New Custom Craft Enquiry from ${request.name}`);
+    formData.append('message', emailBody);
+    formData.append('from_name', 'SB Pattern Works Custom Craft');
+
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        access_key: apiKey,
-        subject: `New Custom Craft Request [${request.referenceNo}]: ${request.name} - ${request.companyName || request.city}`,
-        to_email: targetEmail,
-        from_name: 'SB Pattern Works Custom Craft Portal',
-        replyto: request.email,
-        name: request.name,
-        email: request.email,
-        message: emailBody,
-      }),
+      body: formData,
     });
 
     const resData = await response.json();

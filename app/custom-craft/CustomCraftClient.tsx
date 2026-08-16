@@ -200,6 +200,52 @@ export const CustomCraftClient: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setSubmittedRef(data.referenceNo);
+
+        // Dispatch client-side Web3Forms notification (matching Contact & RFQ forms)
+        try {
+          const web3Data = new FormData();
+          const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '5c13d35f-9934-4b1e-b53b-4c469ac826ea';
+          const metalsStr = selectedMetals.join(', ');
+          const emailMessage = `
+=== NEW CUSTOM CRAFT ENQUIRY ===
+Ref No: ${data.referenceNo}
+
+CUSTOMER DETAILS:
+- Name: ${name}
+- Company: ${companyName || 'N/A'}
+- Email: ${email}
+- Phone: ${contactNumber}
+- Location: ${address ? `${address}, ` : ''}${city}, ${state}, ${country} ${zipCode || ''}
+
+REQUIREMENTS:
+- Purpose: ${purpose === 'Other' ? `Other (${customPurpose})` : purpose}
+- Metals: ${metalsStr} ${customMetal ? `(Custom: ${customMetal})` : ''}
+- Finish: ${finishType} (${finalFinish || 'N/A'})
+- Expected Qty: ${expectedQuantity || 'N/A'}
+- Delivery Date: ${deliveryDate || 'N/A'}
+
+PRODUCT DESCRIPTION:
+${description}
+
+ATTACHED DRAWINGS & CAD FILES (${attachments.length}):
+${attachments.map((a, i) => `${i + 1}. ${a.fileName} (${a.fileUrl})`).join('\n') || 'None'}
+          `.trim();
+
+          web3Data.append('access_key', apiKey);
+          web3Data.append('name', name);
+          web3Data.append('email', email);
+          web3Data.append('phone', contactNumber);
+          web3Data.append('subject', `[${data.referenceNo}] New Custom Craft Request from ${name}`);
+          web3Data.append('message', emailMessage);
+          web3Data.append('from_name', 'SB Pattern Works Custom Craft');
+
+          await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: web3Data,
+          });
+        } catch (web3Err) {
+          console.warn('[CUSTOM_CRAFT_WEB3FORMS_WARN]', web3Err);
+        }
       } else {
         setErrorMsg(data.error || 'Submission failed. Please try again.');
       }
