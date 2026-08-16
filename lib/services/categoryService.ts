@@ -166,7 +166,7 @@ export async function createCategory(data: {
       seoTitle: data.seoTitle,
       seoDescription: data.seoDescription,
       seoKeywords: data.seoKeywords,
-      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/products/${slug}`),
+      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/products/${finalSlug}`),
       ogImage: data.ogImage,
       createdBy: data.createdBy,
     },

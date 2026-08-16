@@ -480,7 +480,9 @@ export async function updateProduct(id: string, inputData: any) {
   if (rawData.seoTitle !== undefined) updateData.seoTitle = rawData.seoTitle || null;
   if (rawData.seoDescription !== undefined) updateData.seoDescription = rawData.seoDescription || null;
   if (rawData.seoKeywords !== undefined) updateData.seoKeywords = rawData.seoKeywords || null;
-  updateData.canonicalUrl = rawData.canonicalUrl || getCanonicalUrl(`/product/${finalSlug || existing.slug}`);
+  if (slug) {
+    updateData.canonicalUrl = rawData.canonicalUrl || getCanonicalUrl(`/product/${slug}`);
+  }
   if (rawData.ogImage !== undefined) updateData.ogImage = rawData.ogImage || null;
   if (rawData.updatedBy !== undefined) updateData.updatedBy = rawData.updatedBy || null;
 

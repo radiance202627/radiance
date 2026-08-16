@@ -116,7 +116,7 @@ export async function createCollection(data: {
       seoTitle: data.seoTitle,
       seoDescription: data.seoDescription,
       seoKeywords: data.seoKeywords,
-      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/collections/${slug}`),
+      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/collections/${finalSlug}`),
       ogImage: data.ogImage,
       createdBy: data.createdBy,
     },
