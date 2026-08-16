@@ -154,12 +154,14 @@ export const Header: React.FC = () => {
               placeholder="Search product code, SKU, hardware category, material..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search product catalog"
               className="flex-1 bg-[#F3F0E8] border border-[#E6E1D7] rounded-[4px] px-4 py-2 text-[#1C1917] placeholder-[#6B635B] text-xs focus:outline-none focus:border-[#9E7B47]"
               autoFocus
             />
             <button
               type="submit"
               className="btn-luxury-primary"
+              aria-label="Submit search query"
             >
               Search
             </button>
@@ -167,6 +169,7 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => setIsSearchOpen(false)}
               className="p-2 text-[#6B635B] hover:text-[#1C1917]"
+              aria-label="Close search overlay"
             >
               <X className="w-4 h-4 stroke-[1.5]" />
             </button>

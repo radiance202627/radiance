@@ -102,10 +102,12 @@ export default async function HomePage() {
         {/* Subtle Background Texture */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1920&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
             alt="SB Pattern Works Architectural Hardware"
             fill
             priority
+            quality={80}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
             className="object-cover object-center opacity-[0.06] mix-blend-multiply scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5] via-[#FAF8F5]/90 to-[#FAF8F5]" />

@@ -65,12 +65,18 @@ export const Footer: React.FC = () => {
             <p className="text-xs text-[#6B635B] leading-relaxed pr-6">
               SB PATTERN WORKS is a premier luxury manufacturer and exporter of architectural, cabinet, door, and bespoke metal components. Serving hardware distributors, interior designers, architects, and international bulk importers worldwide.
             </p>
-            <div className="space-y-2 text-xs text-[#6B635B] pt-2">
+            <div className="space-y-2 text-xs text-[#575048] pt-2">
               <p className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#9E7B47] stroke-[1.5]" /> Sales@sbpatternworks.com
+                <Mail className="w-4 h-4 text-[#9E7B47] stroke-[1.5]" />
+                <a href="mailto:Sales@sbpatternworks.com" className="hover:text-[#9E7B47] transition-colors" aria-label="Email Sales Department">
+                  Sales@sbpatternworks.com
+                </a>
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#9E7B47] stroke-[1.5]" /> +91 (120) 456-7890 / +91 (571) 240-0001
+                <Phone className="w-4 h-4 text-[#9E7B47] stroke-[1.5]" />
+                <a href="tel:+911204567890" className="hover:text-[#9E7B47] transition-colors" aria-label="Call Sales Office">
+                  +91 (120) 456-7890 / +91 (571) 240-0001
+                </a>
               </p>
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#9E7B47] shrink-0 mt-0.5 stroke-[1.5]" /> E-41 CDF CHHERAT, INDUSTRIAL AREA CDF, ALIGARH, UTTAR PRADESH 202001, India
