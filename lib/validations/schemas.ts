@@ -63,7 +63,7 @@ export const variantSchema = z.object({
 });
 
 export const productImageSchema = z.object({
-  url: z.string().url('Image must be a valid URL'),
+  url: z.string().min(1, 'Image URL is required'),
   altText: z.string().optional(),
   isFeatured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
@@ -72,13 +72,13 @@ export const productImageSchema = z.object({
 export const productSchema = z.object({
   name: z.string().min(2, 'Product name is required'),
   slug: z.string().optional(),
-  sku: z.string().min(2, 'SKU is required'),
+  sku: z.string().min(1, 'SKU is required'),
   productCode: z.string().optional(),
   categoryId: z.string().min(1, 'Category is required'),
   subcategoryId: z.string().nullable().optional(),
   shortDescription: z.string().optional(),
   description: z.string().optional(),
-  material: z.string().min(1, 'Material is required'),
+  material: z.string().optional().default('Solid Brass'),
   finish: z.string().optional(),
   weight: z.string().optional(),
   dimensions: z.string().optional(),

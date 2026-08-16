@@ -281,14 +281,14 @@ export async function createProduct(data: {
             })),
           }
         : undefined,
-      variants: data.variants
+      variants: Array.isArray(data.variants) && data.variants.length > 0
         ? {
-            create: data.variants.map((v) => ({
-              size: v.size,
-              finish: v.finish,
-              material: v.material,
-              sku: v.sku,
-              variantCode: v.variantCode,
+            create: data.variants.map((v, idx) => ({
+              size: v.size || null,
+              finish: v.finish || null,
+              material: v.material || null,
+              sku: v.sku && v.sku.trim() ? v.sku.trim() : (data.sku ? `${data.sku}-V${idx + 1}` : null),
+              variantCode: v.variantCode || null,
             })),
           }
         : undefined,
@@ -395,20 +395,24 @@ export async function updateProduct(id: string, inputData: any) {
   // 3. Process Variants nested relation write
   let variantsNested: any = undefined;
   if (Array.isArray(rawData.variants)) {
-    const processedVariants = rawData.variants.map((v: any, idx: number) => ({
-      size: v.size || null,
-      finish: v.finish || null,
-      material: v.material || null,
-      sku: v.sku || (rawData.sku ? `${rawData.sku}-V${idx + 1}` : null),
-      variantCode: v.variantCode || null,
-      sortOrder: v.sortOrder !== undefined ? Number(v.sortOrder) : idx,
-      status: v.status || 'ACTIVE',
-    }));
+    if (rawData.variants.length === 0) {
+      variantsNested = { deleteMany: {} };
+    } else {
+      const processedVariants = rawData.variants.map((v: any, idx: number) => ({
+        size: v.size || null,
+        finish: v.finish || null,
+        material: v.material || null,
+        sku: v.sku && v.sku.trim() ? v.sku.trim() : (rawData.sku ? `${rawData.sku}-V${idx + 1}` : null),
+        variantCode: v.variantCode || null,
+        sortOrder: v.sortOrder !== undefined ? Number(v.sortOrder) : idx,
+        status: v.status || 'ACTIVE',
+      }));
 
-    variantsNested = {
-      deleteMany: {},
-      create: processedVariants,
-    };
+      variantsNested = {
+        deleteMany: {},
+        create: processedVariants,
+      };
+    }
   }
 
   // 4. Process Collections nested relation write

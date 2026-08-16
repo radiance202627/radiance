@@ -36,7 +36,9 @@ export async function POST(request: NextRequest) {
     const validation = productSchema.safeParse(body);
 
     if (!validation.success) {
-      return apiError('Validation failed', 400, 'INVALID_INPUT', validation.error.format());
+      const fieldErrors = validation.error.issues.map((i) => `${i.path.join('.') || 'field'}: ${i.message}`).join('; ');
+      console.error('[PRODUCT_CREATE_VALIDATION_ERROR]', fieldErrors, validation.error.format());
+      return apiError(`Validation failed: ${fieldErrors}`, 400, 'INVALID_INPUT', validation.error.format());
     }
 
     const product = await createProduct(validation.data as any);

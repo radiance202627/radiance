@@ -154,7 +154,8 @@ export default function CreateProductPage() {
           router.refresh();
         }, 1000);
       } else {
-        addToast('error', data.error?.message || 'Failed to create product');
+        const errorMsg = typeof data.error === 'string' ? data.error : data.error?.message || 'Failed to create product';
+        addToast('error', errorMsg);
       }
     } catch {
       addToast('error', 'An error occurred while saving the product');

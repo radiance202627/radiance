@@ -205,7 +205,8 @@ export default function EditProductPage() {
       if (res.ok && data.success) {
         addToast('success', 'Product updated successfully!');
       } else {
-        addToast('error', data.error?.message || 'Failed to update product');
+        const errorMsg = typeof data.error === 'string' ? data.error : data.error?.message || 'Failed to update product';
+        addToast('error', errorMsg);
       }
     } catch {
       addToast('error', 'An error occurred while updating the product');
