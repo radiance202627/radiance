@@ -87,50 +87,54 @@ export async function sendCustomCraftNotificationEmail(request: any) {
   const targetEmail = 'Sales@sbpatternworks.com';
   console.log(`[CUSTOM_CRAFT_EMAIL] Sending custom craft notification for ${request.referenceNo} to ${targetEmail}`);
 
-  // Format notification payload (Can be integrated with Web3Forms, Nodemailer, Resend, or Webhook)
   try {
     const metalsList = Array.isArray(request.metals) ? request.metals.join(', ') : request.metals;
     const emailBody = `
-=== CUSTOM CRAFT ENQUIRY RECEIVED ===
+=== NEW CUSTOM CRAFT ENQUIRY ===
 Ref No: ${request.referenceNo}
-Timestamp: ${new Date(request.createdAt).toLocaleString()}
+Timestamp: ${new Date(request.createdAt || Date.now()).toLocaleString()}
 
 CUSTOMER DETAILS:
-Name: ${request.name}
-Company: ${request.companyName || 'N/A'}
-Email: ${request.email}
-Phone: ${request.contactNumber}
-Address: ${request.address || ''}, ${request.city}, ${request.state}, ${request.country} - ${request.zipCode || ''}
+• Name: ${request.name}
+• Company: ${request.companyName || 'N/A'}
+• Email: ${request.email}
+• Phone: ${request.contactNumber}
+• Location: ${request.address ? `${request.address}, ` : ''}${request.city}, ${request.state}, ${request.country} ${request.zipCode || ''}
 
-REQUIREMENTS:
-Purpose: ${request.purpose === 'Other' ? `Other (${request.customPurpose})` : request.purpose}
-Metals Selected: ${metalsList} ${request.customMetal ? `(Custom: ${request.customMetal})` : ''}
-Finish Type: ${request.finishType}
-Selected Finish: ${request.selectedFinish || 'N/A'}
-Expected Quantity: ${request.expectedQuantity || 'N/A'}
-Target Delivery Date: ${request.deliveryDate || 'N/A'}
+MANUFACTURING REQUIREMENTS:
+• Purpose: ${request.purpose === 'Other' ? `Other (${request.customPurpose})` : request.purpose}
+• Metals Selected: ${metalsList} ${request.customMetal ? `(Custom: ${request.customMetal})` : ''}
+• Finish Type: ${request.finishType}
+• Selected Finish: ${request.selectedFinish || 'N/A'}
+• Expected Quantity: ${request.expectedQuantity || 'N/A'}
+• Target Delivery Date: ${request.deliveryDate || 'N/A'}
 
-PRODUCT DESCRIPTION:
+PRODUCT DESCRIPTION & SPECIFICATIONS:
 ${request.description}
 
-ATTACHMENTS (${request.attachments?.length || 0}):
-${request.attachments?.map((a: any) => `- ${a.fileName}: ${a.fileUrl}`).join('\n') || 'None'}
+ATTACHED DRAWINGS & CAD FILES (${request.attachments?.length || 0}):
+${request.attachments?.map((a: any, idx: number) => `${idx + 1}. ${a.fileName} (${a.fileUrl})`).join('\n') || 'None'}
     `.trim();
 
-    // If Web3Forms key exists in env or direct fetch
-    if (process.env.NEXT_PUBLIC_WEB3FORMS_KEY) {
-      await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
-          subject: `New Custom Craft Enquiry: ${request.referenceNo} - ${request.name}`,
-          to_email: targetEmail,
-          from_name: 'SB Pattern Works Web Portal',
-          message: emailBody,
-        }),
-      }).catch((err) => console.warn('[EMAIL_DISPATCH_WARN]', err));
-    }
+    const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '5c13d35f-9934-4b1e-b53b-4c469ac826ea';
+
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: apiKey,
+        subject: `New Custom Craft Request [${request.referenceNo}]: ${request.name} - ${request.companyName || request.city}`,
+        to_email: targetEmail,
+        from_name: 'SB Pattern Works Custom Craft Portal',
+        replyto: request.email,
+        name: request.name,
+        email: request.email,
+        message: emailBody,
+      }),
+    });
+
+    const resData = await response.json();
+    console.log('[CUSTOM_CRAFT_EMAIL_DISPATCH_RESULT]', resData);
   } catch (err) {
     console.error('[CUSTOM_CRAFT_EMAIL_ERROR]', err);
   }

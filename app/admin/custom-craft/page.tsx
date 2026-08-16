@@ -128,6 +128,42 @@ export default function AdminCustomCraftPage() {
     }
   };
 
+  const handleDownloadAttachment = (fileUrl: string, fileName: string) => {
+    if (!fileUrl) return;
+
+    if (fileUrl.startsWith('data:')) {
+      const a = document.createElement('a');
+      a.href = fileUrl;
+      a.download = fileName || 'custom-craft-attachment';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+
+    fetch(fileUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName || 'custom-craft-attachment';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+      })
+      .catch(() => {
+        const a = document.createElement('a');
+        a.href = fileUrl;
+        a.target = '_blank';
+        a.download = fileName || 'custom-craft-attachment';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+  };
+
   const handleDelete = async (id: string, permanent = false) => {
     if (!confirm(permanent ? 'Permanently delete this enquiry?' : 'Move enquiry to trash?')) return;
 
@@ -415,15 +451,14 @@ export default function AdminCustomCraftPage() {
                         className="flex items-center justify-between p-3 bg-[#FAF9F6] border border-[#E5E2DA] rounded-lg"
                       >
                         <span className="font-mono text-xs text-[#222222] truncate">{att.fileName}</span>
-                        <a
-                          href={att.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadAttachment(att.fileUrl, att.fileName)}
                           className="px-3 py-1 bg-[#B08D57] text-[#FAF9F6] text-[10px] font-semibold uppercase tracking-wider rounded-md hover:bg-[#9A7B4B] transition flex items-center gap-1 shrink-0"
                         >
                           <Download className="w-3.5 h-3.5" />
-                          <span>Download</span>
-                        </a>
+                          <span>Download File</span>
+                        </button>
                       </div>
                     ))}
                   </div>
