@@ -94,7 +94,7 @@ export default async function HomePage() {
   ];
 
   return (
-    <div className="space-y-24 sm:space-y-32 pb-24 font-sans bg-[#FAF8F5] text-[#1C1917]">
+    <div className="space-y-12 sm:space-y-16 lg:space-y-20 pb-24 font-sans bg-[#FAF8F5] text-[#1C1917]">
       <JsonLd data={websiteSchema} />
 
       {/* GRAND EDITORIAL HERO SECTION */}
@@ -112,7 +112,7 @@ export default async function HomePage() {
         </div>
 
         {/* Hero Centered Editorial Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 lg:py-20 text-center space-y-6 sm:space-y-8">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-14 pb-8 sm:pb-12 lg:pb-14 text-center space-y-4 sm:space-y-5 lg:space-y-6">
           <div className="eyebrow-tag justify-center mx-auto px-4 py-1.5 bg-[#F3F0E8] border border-[#E6E1D7] rounded-[4px]">
             <Hammer className="w-3.5 h-3.5 text-[#9E7B47] stroke-[1.5]" />
             <span>Architectural Brass Foundry & Exporter • Est. 1994</span>
@@ -127,7 +127,7 @@ export default async function HomePage() {
           </p>
 
           {/* Understated Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-1 sm:pt-2">
             <Link
               href="/products"
               className="btn-luxury-primary w-full sm:w-auto"
@@ -146,7 +146,7 @@ export default async function HomePage() {
           </div>
 
           {/* Heritage Metal Metadata Bar */}
-          <div className="pt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-[#E6E1D7] text-xs text-[#6B635B] max-w-3xl mx-auto">
+          <div className="pt-6 sm:pt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 border-t border-[#E6E1D7] text-xs text-[#6B635B] max-w-3xl mx-auto">
             <div className="space-y-1">
               <p className="font-serif font-medium text-[#1C1917] text-lg">Virgin Brass Alloys</p>
               <p className="text-[11px] text-[#6B635B]">CuZn39Pb2 Solid Brass & Sand-Cast Bronze</p>
