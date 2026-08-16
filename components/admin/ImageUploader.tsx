@@ -101,35 +101,7 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
         <label className="block text-xs font-semibold uppercase tracking-wider text-stone-300">
           Product Gallery & Images ({images.length})
         </label>
-        <button
-          type="button"
-          onClick={() => setShowUrlInput(!showUrlInput)}
-          className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-medium"
-        >
-          <LinkIcon className="w-3.5 h-3.5" />
-          {showUrlInput ? 'Hide URL Input' : 'Add Image URL'}
-        </button>
       </div>
-
-      {/* URL Input Bar */}
-      {showUrlInput && (
-        <div className="flex items-center gap-2 bg-stone-900 border border-stone-800 p-2 rounded-xl">
-          <input
-            type="url"
-            value={urlInput}
-            onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="Paste image URL (e.g. https://images.unsplash.com/...)"
-            className="flex-1 bg-stone-950 border border-stone-800 rounded-lg px-3 py-1.5 text-xs text-stone-200 focus:outline-none"
-          />
-          <button
-            type="button"
-            onClick={handleAddUrl}
-            className="px-3 py-1.5 bg-amber-400 text-stone-950 rounded-lg text-xs font-semibold hover:bg-amber-300 transition"
-          >
-            Add URL
-          </button>
-        </div>
-      )}
 
       {/* Drag & Drop Upload Zone */}
       <div className="border-2 border-dashed border-stone-800 hover:border-amber-500/50 rounded-2xl p-6 text-center bg-stone-950/60 transition cursor-pointer relative">

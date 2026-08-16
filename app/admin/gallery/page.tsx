@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { uploadImageToStorage } from '@/lib/storage';
 import { GALLERY_CATEGORIES } from '@/lib/services/galleryService';
+import MediaUploader from '@/components/admin/MediaUploader';
 
 interface GalleryItem {
   id?: string;
@@ -420,46 +421,28 @@ export default function AdminGalleryPage() {
                 />
               </div>
 
-              {/* Multi-Image Uploader */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-[#B08D57]">
-                    Gallery Images ({items.length})
-                  </label>
-
-                  <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] text-xs font-semibold uppercase rounded-lg cursor-pointer transition">
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>{uploading ? 'Uploading...' : 'Upload Photos'}</span>
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={handleMultipleImageUpload}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-
-                {items.length === 0 ? (
-                  <div className="border-2 border-dashed border-[#E5E2DA] p-6 text-center rounded-xl bg-[#F4F2ED] text-xs text-[#666666]">
-                    No images added yet. Click "Upload Photos" to add images to this album.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-60 overflow-y-auto p-2 bg-[#F4F2ED] rounded-xl border border-[#E5E2DA]">
-                    {items.map((item, idx) => (
-                      <div key={idx} className="relative group rounded-lg overflow-hidden border border-[#E5E2DA] bg-black/10 aspect-square">
-                        <img src={item.url} alt={item.altText || ''} className="w-full h-full object-cover" />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-80 hover:opacity-100 transition"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              {/* Multi-Image MediaUploader */}
+              <div>
+                <MediaUploader
+                  label="Gallery Album Photos"
+                  value={items.map((i) => i.url)}
+                  onChange={(urls) => {
+                    const newUrls = Array.isArray(urls) ? urls : [urls];
+                    setItems(
+                      newUrls.map((url, idx) => ({
+                        url,
+                        title: `Photo ${idx + 1}`,
+                        altText: title || 'Gallery Image',
+                        sortOrder: idx + 1,
+                      }))
+                    );
+                    if (newUrls.length > 0 && !featuredImage) {
+                      setFeaturedImage(newUrls[0]);
+                    }
+                  }}
+                  multiple={true}
+                  folder="gallery"
+                />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E2DA]">

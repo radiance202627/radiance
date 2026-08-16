@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { FolderTree, Plus, Search, RefreshCw, X, Save } from 'lucide-react';
 import CategoryTree, { CategoryTreeNode } from '@/components/admin/CategoryTree';
 import ImageUploader, { ImageItem } from '@/components/admin/ImageUploader';
+import MediaUploader from '@/components/admin/MediaUploader';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import ToastNotification, { ToastMessage } from '@/components/admin/ToastNotification';
 import { slugify } from '@/lib/utils/slug';
@@ -303,19 +304,14 @@ export default function AdminCategoriesPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">
-                    Category Image URL
-                  </label>
-                  <input
-                    type="text"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                    placeholder="https://images.unsplash.com/..."
-                    className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3 py-2 text-xs text-stone-200 focus:outline-none"
-                  />
-                </div>
+              <div>
+                <MediaUploader
+                  label="Category Image"
+                  value={image}
+                  onChange={(url) => setImage(url as string)}
+                  folder="categories"
+                />
+              </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
@@ -345,7 +341,6 @@ export default function AdminCategoriesPage() {
                     </select>
                   </div>
                 </div>
-              </div>
 
               {/* SEO Fields */}
               <div className="border-t border-stone-800 pt-3 space-y-3">

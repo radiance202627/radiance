@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Boxes, Plus, Edit, Trash2, RefreshCw, X, Save, Star } from 'lucide-react';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import ToastNotification, { ToastMessage } from '@/components/admin/ToastNotification';
+import MediaUploader from '@/components/admin/MediaUploader';
 import { slugify } from '@/lib/utils/slug';
 
 export default function AdminCollectionsPage() {
@@ -319,15 +320,11 @@ export default function AdminCollectionsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">
-                  Collection Image URL
-                </label>
-                <input
-                  type="text"
+                <MediaUploader
+                  label="Collection Image"
                   value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3 py-2 text-xs text-stone-200 focus:outline-none"
+                  onChange={(url) => setImage(url as string)}
+                  folder="collections"
                 />
               </div>
 

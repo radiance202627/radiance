@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Save, Sparkles, Layers, Sliders, Image as ImageIcon, Search, Tag, Globe, Check } from 'lucide-react';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import ImageUploader, { ImageItem } from '@/components/admin/ImageUploader';
+import MediaUploader from '@/components/admin/MediaUploader';
 import SpecificationBuilder from '@/components/admin/SpecificationBuilder';
 import VariantManager, { VariantItem } from '@/components/admin/VariantManager';
 import ToastNotification, { ToastMessage } from '@/components/admin/ToastNotification';
@@ -546,15 +547,11 @@ export default function CreateProductPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-2">
-                Open Graph Image URL
-              </label>
-              <input
-                type="url"
+              <MediaUploader
+                label="Open Graph Social Share Image"
                 value={ogImage}
-                onChange={(e) => setOgImage(e.target.value)}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-xs text-stone-100"
+                onChange={(url) => setOgImage(url as string)}
+                folder="products"
               />
             </div>
           </div>

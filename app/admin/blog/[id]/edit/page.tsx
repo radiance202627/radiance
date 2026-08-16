@@ -17,6 +17,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { uploadImageToStorage } from '@/lib/storage';
+import MediaUploader from '@/components/admin/MediaUploader';
 
 export default function EditBlogPostPage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
@@ -357,12 +358,11 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-medium text-[#666666] mb-1">OG Image URL</label>
-                <input
-                  type="text"
+                <MediaUploader
+                  label="OG Social Share Image"
                   value={ogImage}
-                  onChange={(e) => setOgImage(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl text-xs text-[#222222]"
+                  onChange={(url) => setOgImage(url as string)}
+                  folder="blogs"
                 />
               </div>
             </div>
@@ -412,33 +412,18 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
             </div>
           </div>
 
-          {/* Featured Image Uploader */}
+          {/* Featured Image MediaUploader */}
           <div className="bg-[#F4F2ED] p-6 rounded-2xl border border-[#E5E2DA] space-y-4">
-            <h3 className="font-serif font-bold text-sm text-[#222222]">Featured Image</h3>
-
-            {featuredImage ? (
-              <div className="space-y-2">
-                <div className="relative h-40 rounded-xl overflow-hidden border border-[#E5E2DA] bg-black/5">
-                  <img src={featuredImage} alt="Featured" className="w-full h-full object-cover" />
-                </div>
-                <input
-                  type="text"
-                  value={featuredImage}
-                  onChange={(e) => setFeaturedImage(e.target.value)}
-                  className="w-full px-3 py-1.5 bg-[#FAF9F6] border border-[#E5E2DA] rounded-lg text-[11px] text-[#666666]"
-                />
-              </div>
-            ) : (
-              <div className="border-2 border-dashed border-[#E5E2DA] rounded-xl p-6 text-center space-y-2 bg-[#FAF9F6]">
-                <ImageIcon className="w-8 h-8 text-[#666666]/40 mx-auto" />
-                <p className="text-xs text-[#666666]">Upload image to Supabase Storage</p>
-                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#B08D57] text-[#FAF9F6] text-[11px] font-semibold uppercase rounded-lg cursor-pointer hover:bg-[#9A7B4B] transition">
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>{uploading ? 'Uploading...' : 'Browse File'}</span>
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                </label>
-              </div>
-            )}
+            <MediaUploader
+              label="Featured Article Image"
+              value={featuredImage}
+              onChange={(url) => {
+                const val = url as string;
+                setFeaturedImage(val);
+                if (!ogImage) setOgImage(val);
+              }}
+              folder="blogs"
+            />
 
             <div>
               <label className="block text-[11px] font-medium text-[#666666] mb-1">Image Alt Text</label>

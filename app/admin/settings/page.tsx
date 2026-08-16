@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Save, Building, Phone, Mail, MapPin, Share2, Globe, Shield, RefreshCw } from 'lucide-react';
 import ToastNotification, { ToastMessage } from '@/components/admin/ToastNotification';
+import MediaUploader from '@/components/admin/MediaUploader';
 
 export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -179,15 +180,12 @@ export default function AdminSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-2">
-              Logo Image URL
-            </label>
-            <input
-              type="text"
+            <MediaUploader
+              label="Company Logo"
               value={logo}
-              onChange={(e) => setLogo(e.target.value)}
-              placeholder="/images/logo.png"
-              className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-xs text-stone-100"
+              onChange={(url) => setLogo(url as string)}
+              folder="logos"
+              acceptSvg={true}
             />
           </div>
         </div>
