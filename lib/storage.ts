@@ -1,9 +1,9 @@
 /**
- * Storage utility for managing image uploads.
+ * Storage utility for managing image and file uploads.
  * Uses Supabase Storage if NEXT_PUBLIC_SUPABASE_URL is configured,
  * otherwise provides an inline data URL fallback for local development.
  */
-export async function uploadImageToStorage(file: File): Promise<string> {
+export async function uploadImageToStorage(file: File, bucket = 'catalog-images', folder = 'products'): Promise<string> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
@@ -17,17 +17,17 @@ export async function uploadImageToStorage(file: File): Promise<string> {
       const supabase = createClient(supabaseUrl, supabaseKey);
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-      const filePath = `products/${fileName}`;
+      const filePath = `${folder}/${fileName}`;
 
       const { data, error } = await supabase.storage
-        .from('catalog-images')
+        .from(bucket)
         .upload(filePath, file, { cacheControl: '3600', upsert: true });
 
       if (error) {
         console.warn('Supabase upload error, using fallback URL:', error.message);
       } else if (data) {
         const { data: publicData } = supabase.storage
-          .from('catalog-images')
+          .from(bucket)
           .getPublicUrl(filePath);
         return publicData.publicUrl;
       }
@@ -43,4 +43,8 @@ export async function uploadImageToStorage(file: File): Promise<string> {
     reader.onerror = (err) => reject(err);
     reader.readAsDataURL(file);
   });
+}
+
+export async function uploadFileToStorage(file: File, folder = 'custom-craft'): Promise<string> {
+  return uploadImageToStorage(file, 'custom-craft-files', folder);
 }

@@ -309,19 +309,196 @@ export async function createProduct(data: {
   });
 }
 
-export async function updateProduct(id: string, data: any) {
-  if (data.name && !data.slug) {
-    data.slug = await generateUniqueSlug('product', data.name, id);
+// Server-side base64 image uploader helper
+async function handleBase64Upload(dataUrl: string): Promise<string> {
+  if (!dataUrl || !dataUrl.startsWith('data:image/')) return dataUrl;
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.SUPABASE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const mimeTypeMatch = dataUrl.match(/^data:(image\/[a-zA-Z+]+);base64,/);
+      const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/png';
+      const ext = mimeType.split('/')[1] || 'png';
+
+      const base64Data = dataUrl.replace(/^data:image\/[a-zA-Z+]+;base64,/, '');
+      const buffer = Buffer.from(base64Data, 'base64');
+      const fileName = `products/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
+
+      const { data, error } = await supabase.storage
+        .from('catalog-images')
+        .upload(fileName, buffer, { contentType: mimeType, upsert: true });
+
+      if (!error && data) {
+        const { data: publicData } = supabase.storage.from('catalog-images').getPublicUrl(fileName);
+        return publicData.publicUrl;
+      }
+    } catch (e) {
+      console.warn('[BASE64_UPLOAD_ERROR]', e);
+    }
   }
+  return dataUrl;
+}
+
+export async function updateProduct(id: string, inputData: any) {
+  const rawData = { ...inputData };
+
+  // 1. Generate unique slug if name changed and slug not explicitly set
+  let slug = rawData.slug;
+  if (rawData.name && !slug) {
+    slug = await generateUniqueSlug('product', rawData.name, id);
+  }
+
+  // 2. Process Images nested relation write
+  let imagesNested: any = undefined;
+  if (Array.isArray(rawData.images)) {
+    const processedImages: { url: string; altText?: string; isFeatured?: boolean; sortOrder?: number }[] = [];
+
+    for (let i = 0; i < rawData.images.length; i++) {
+      const img = rawData.images[i];
+      let url = typeof img === 'string' ? img : img?.url;
+
+      if (url && url.startsWith('data:image/')) {
+        url = await handleBase64Upload(url);
+      }
+
+      if (url) {
+        processedImages.push({
+          url,
+          altText: typeof img === 'object' && img.altText ? img.altText : rawData.name,
+          isFeatured: typeof img === 'object' && img.isFeatured !== undefined ? !!img.isFeatured : i === 0,
+          sortOrder: typeof img === 'object' && img.sortOrder !== undefined ? Number(img.sortOrder) : i + 1,
+        });
+      }
+    }
+
+    imagesNested = {
+      deleteMany: {},
+      create: processedImages.map((img) => ({
+        url: img.url,
+        altText: img.altText || null,
+        isFeatured: img.isFeatured ?? false,
+        sortOrder: img.sortOrder ?? 0,
+      })),
+    };
+  }
+
+  // 3. Process Variants nested relation write
+  let variantsNested: any = undefined;
+  if (Array.isArray(rawData.variants)) {
+    const processedVariants = rawData.variants.map((v: any, idx: number) => ({
+      size: v.size || null,
+      finish: v.finish || null,
+      material: v.material || null,
+      sku: v.sku || (rawData.sku ? `${rawData.sku}-V${idx + 1}` : null),
+      variantCode: v.variantCode || null,
+      sortOrder: v.sortOrder !== undefined ? Number(v.sortOrder) : idx,
+      status: v.status || 'ACTIVE',
+    }));
+
+    variantsNested = {
+      deleteMany: {},
+      create: processedVariants,
+    };
+  }
+
+  // 4. Process Collections nested relation write
+  let collectionsNested: any = undefined;
+  const rawCollectionIds = rawData.collectionIds || rawData.collections;
+  if (Array.isArray(rawCollectionIds)) {
+    const collectionIds: string[] = rawCollectionIds
+      .map((c: any) => (typeof c === 'string' ? c : c.collectionId || c.id))
+      .filter(Boolean);
+
+    collectionsNested = {
+      deleteMany: {},
+      create: collectionIds.map((cid) => ({
+        collectionId: cid,
+      })),
+    };
+  }
+
+  // 5. Styles & Specifications JSON
+  let stylesJson: any = undefined;
+  if (rawData.styles !== undefined) {
+    if (Array.isArray(rawData.styles)) {
+      stylesJson = JSON.stringify(rawData.styles);
+    } else if (typeof rawData.styles === 'string') {
+      stylesJson = rawData.styles;
+    } else {
+      stylesJson = JSON.stringify(rawData.styles);
+    }
+  }
+
+  let specsJson: any = undefined;
+  if (rawData.specifications !== undefined) {
+    if (typeof rawData.specifications === 'string') {
+      specsJson = rawData.specifications;
+    } else if (typeof rawData.specifications === 'object') {
+      specsJson = JSON.stringify(rawData.specifications);
+    }
+  }
+
+  // 6. Status & PublishedAt
+  const status = rawData.status || undefined;
+  let publishedAt: Date | undefined = undefined;
+  if (status === 'PUBLISHED' || status === ProductStatus.PUBLISHED) {
+    publishedAt = new Date();
+  }
+
+  // 7. Construct clean updateData matching Prisma ProductUpdateInput EXACTLY
+  const updateData: any = {};
+
+  if (rawData.name !== undefined) updateData.name = rawData.name;
+  if (slug !== undefined) updateData.slug = slug;
+  if (rawData.sku !== undefined) updateData.sku = rawData.sku;
+  if (rawData.productCode !== undefined) updateData.productCode = rawData.productCode;
+  if (rawData.categoryId !== undefined) updateData.categoryId = rawData.categoryId;
+  if (rawData.subcategoryId !== undefined) updateData.subcategoryId = rawData.subcategoryId || null;
+  if (rawData.shortDescription !== undefined) updateData.shortDescription = rawData.shortDescription || null;
+  if (rawData.description !== undefined) updateData.description = rawData.description || null;
+  if (rawData.material !== undefined) updateData.material = rawData.material;
+  if (rawData.finish !== undefined) updateData.finish = rawData.finish || null;
+  if (rawData.weight !== undefined) updateData.weight = rawData.weight || null;
+  if (rawData.dimensions !== undefined) updateData.dimensions = rawData.dimensions || null;
+  if (stylesJson !== undefined) updateData.styles = stylesJson;
+  if (specsJson !== undefined) updateData.specifications = specsJson;
+  if (rawData.featured !== undefined) updateData.featured = Boolean(rawData.featured);
+  if (rawData.sortOrder !== undefined) updateData.sortOrder = Number(rawData.sortOrder);
+  if (status !== undefined) updateData.status = status;
+  if (publishedAt !== undefined) updateData.publishedAt = publishedAt;
+
+  if (rawData.seoTitle !== undefined) updateData.seoTitle = rawData.seoTitle || null;
+  if (rawData.seoDescription !== undefined) updateData.seoDescription = rawData.seoDescription || null;
+  if (rawData.seoKeywords !== undefined) updateData.seoKeywords = rawData.seoKeywords || null;
+  if (rawData.canonicalUrl !== undefined) updateData.canonicalUrl = rawData.canonicalUrl || null;
+  if (rawData.ogImage !== undefined) updateData.ogImage = rawData.ogImage || null;
+  if (rawData.updatedBy !== undefined) updateData.updatedBy = rawData.updatedBy || null;
+
+  if (imagesNested !== undefined) updateData.images = imagesNested;
+  if (variantsNested !== undefined) updateData.variants = variantsNested;
+  if (collectionsNested !== undefined) updateData.collections = collectionsNested;
+
+  // MANDATORY LOGGING BEFORE PRISMA UPDATE:
+  console.log(JSON.stringify(updateData, null, 2));
 
   return prisma.product.update({
     where: { id },
-    data,
+    data: updateData,
     include: {
       category: true,
       subcategory: true,
       images: true,
       variants: true,
+      collections: { include: { collection: true } },
     },
   });
 }

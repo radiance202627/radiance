@@ -15,6 +15,10 @@ export function slugify(text: string): string {
     .replace(/-+$/, ''); // Trim - from end
 }
 
+export function generateSlug(text: string): string {
+  return slugify(text);
+}
+
 /**
  * Automatically generates a unique SEO-friendly slug for Products, Categories, or Collections,
  * resolving any conflicts by appending numeric suffixes if necessary.

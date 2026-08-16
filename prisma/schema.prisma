@@ -251,18 +251,137 @@ model QuoteItem {
 
 model SiteSettings {
   id            String   @id @default("default")
-  companyName   String   @default("B2B Architectural Hardware")
+  companyName   String   @default("SB PATTERN WORKS")
   logo          String?
-  email         String?  @default("info@architecturalhardware.com")
-  phone         String?  @default("+1 (800) 555-0199")
-  whatsapp      String?  @default("+1 (800) 555-0199")
-  address       String?
+  email         String?  @default("Sales@sbpatternworks.com")
+  phone         String?  @default("+91 (120) 456-7890")
+  whatsapp      String?  @default("+91 (120) 456-7890")
+  address       String?  @default("E-41 CDF CHHERAT, INDUSTRIAL AREA CDF, ALIGARH, UTTAR PRADESH 202001, India")
   googleMapUrl  String?
   socialLinks   Json?
   seoDefaults   Json?
   footerContent Json?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model BlogPost {
+  id             String         @id @default(cuid())
+  title          String
+  slug           String         @unique
+  excerpt        String?
+  content        String
+  featuredImage  String?
+  imageAlt       String?
+  category       String?
+  tags           Json?
+  author         String?        @default("SB Pattern Works")
+  seoTitle       String?
+  seoDescription String?
+  canonicalUrl   String?
+  ogImage        String?
+  readingTime    String?
+  featured       Boolean        @default(false)
+  publishDate    DateTime?
+  status         BlogPostStatus @default(DRAFT)
+  deletedAt      DateTime?
+  createdBy      String?
+  updatedBy      String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([featured])
+  @@index([deletedAt])
+  @@index([publishDate])
+}
+
+model GalleryAlbum {
+  id             String        @id @default(cuid())
+  title          String
+  slug           String        @unique
+  description    String?
+  category       String?       @default("Manufacturing")
+  projectType    String?
+  featuredImage  String?
+  sortOrder      Int           @default(0)
+  status         GalleryStatus @default(PUBLISHED)
+  deletedAt      DateTime?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  items          GalleryItem[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([category])
+  @@index([deletedAt])
+}
+
+model GalleryItem {
+  id        String       @id @default(cuid())
+  albumId   String
+  url       String
+  title     String?
+  altText   String?
+  caption   String?
+  sortOrder Int          @default(0)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  album     GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  @@index([albumId])
+  @@index([sortOrder])
+}
+
+model CustomCraftRequest {
+  id              String                  @id @default(cuid())
+  referenceNo     String                  @unique
+  name            String
+  companyName     String?
+  email           String
+  contactNumber   String
+  address         String?
+  city            String
+  state           String
+  country         String
+  zipCode         String?
+  purpose         String
+  customPurpose   String?
+  metals          Json
+  customMetal     String?
+  finishType      String
+  selectedFinish  String?
+  expectedQuantity String?
+  deliveryDate    String?
+  description     String
+  status          CustomCraftStatus       @default(NEW)
+  internalNotes   String?
+  deletedAt       DateTime?
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+  attachments     CustomCraftAttachment[]
+
+  @@index([referenceNo])
+  @@index([email])
+  @@index([status])
+  @@index([deletedAt])
+  @@index([createdAt])
+}
+
+model CustomCraftAttachment {
+  id        String             @id @default(cuid())
+  requestId String
+  fileName  String
+  fileUrl   String
+  fileType  String?
+  fileSize  Int?
+  createdAt DateTime           @default(now())
+  request   CustomCraftRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
 }
 
 enum Role {
@@ -307,4 +426,27 @@ enum QuoteStatus {
   NEGOTIATION
   WON
   LOST
+}
+
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+enum GalleryStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CustomCraftStatus {
+  NEW
+  REVIEWED
+  QUOTED
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  ARCHIVED
 }

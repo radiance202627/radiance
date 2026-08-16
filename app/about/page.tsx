@@ -8,15 +8,16 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { generateWebPageSchema, generateOrganizationSchema, getCanonicalUrl } from '@/lib/seo/schema';
 
 const canonicalUrl = getCanonicalUrl('/about');
-const title = 'About Us | Brass Foundry & Architectural Hardware Manufacturer Exporter';
-const description = 'Learn about Radiance - Indian foundry manufacturer exporting handcrafted solid brass, bronze, and iron architectural hardware to global specifiers and distributors.';
+const title = 'About Us | SB PATTERN WORKS Foundry & Architectural Hardware Manufacturer';
+const description = 'Learn about SB PATTERN WORKS - Indian foundry manufacturer exporting handcrafted solid brass, bronze, copper, and custom pattern architectural hardware to global specifiers.';
 
 export const metadata: Metadata = {
   title: title,
   description: description,
   keywords: [
-    'Radiance Hardware Foundry',
-    'Aligarh Brass Foundry',
+    'SB PATTERN WORKS Foundry',
+    'Aligarh Metal Foundry',
+    'Custom Craft Pattern Works',
     'Brass Hardware Manufacturer History',
     'Ironmongery Exporter India',
   ],

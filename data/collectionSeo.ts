@@ -29,7 +29,7 @@ export const collectionSeoMap: Record<string, CollectionSeoData> = {
     applications:
       'Mortise door knobs, decorative push plates, rim lock assemblies, window casement peg stays, and cabinet cup pulls.',
     fullEditorial:
-      'The Vintage Hardware Collection by Radiance captures the timeless charm of Victorian and Edwardian architectural ironmongery. Hand-cast from solid brass and patinated by master artisans in Aligarh, India, each piece features hand-chased filigree, beaded borders, and organic patinas that age gracefully over time.',
+      'The Vintage Hardware Collection by SB PATTERN WORKS captures the timeless charm of Victorian and Edwardian architectural ironmongery. Hand-cast from solid brass and patinated by master artisans in Aligarh, India, each piece features hand-chased filigree, beaded borders, and organic patinas that age gracefully over time.',
   },
 
   'black-antique': {

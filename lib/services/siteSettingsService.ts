@@ -15,23 +15,23 @@ export interface SiteSettingsData {
 
 const DEFAULT_SETTINGS = {
   id: 'default',
-  companyName: 'B2B Architectural Hardware',
+  companyName: 'SB PATTERN WORKS',
   logo: '/images/logo.png',
-  email: 'info@architecturalhardware.com',
-  phone: '+1 (800) 555-0199',
-  whatsapp: '+1 (800) 555-0199',
-  address: 'Building No. 4/2, Anoopshahr Road, Front of Radio Colony, Jatav Wali Gali Jamalpur, Aligarh, Uttar Pradesh 202001',
+  email: 'Sales@sbpatternworks.com',
+  phone: '+91 (120) 456-7890',
+  whatsapp: '+91 (120) 456-7890',
+  address: 'E-41 CDF CHHERAT, INDUSTRIAL AREA CDF, ALIGARH, UTTAR PRADESH 202001, India',
   googleMapUrl: 'https://maps.google.com',
   socialLinks: {
-    linkedin: 'https://linkedin.com',
-    instagram: 'https://instagram.com',
+    linkedin: 'https://linkedin.com/company/sb-pattern-works',
+    instagram: 'https://instagram.com/sbpatternworks',
   },
   seoDefaults: {
-    metaTitle: 'B2B Architectural Hardware Catalogue & Supply',
-    metaDescription: 'Manufactured solid brass, bronze, and stainless steel architectural ironmongery for heritage & modern projects.',
+    metaTitle: 'SB PATTERN WORKS | Architectural Hardware & Foundry',
+    metaDescription: 'SB PATTERN WORKS - Premier luxury manufacturer & exporter of solid brass, bronze, copper & custom metal architectural hardware in Aligarh, India.',
   },
   footerContent: {
-    copyright: '© 2026 B2B Architectural Hardware. All Rights Reserved.',
+    copyright: '© 2026 SB PATTERN WORKS. All Rights Reserved.',
   },
 };
 

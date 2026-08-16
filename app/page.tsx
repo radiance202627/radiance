@@ -10,20 +10,21 @@ import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { CollectionCard } from '@/components/catalog/CollectionCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { FinishPalette } from '@/components/ui/FinishPalette';
-import { ArrowRight, ShieldCheck, Layers, Sparkles, PackageCheck, Headphones, Globe2, FileText, Hammer } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Layers, Sparkles, PackageCheck, Globe2, FileText, Hammer } from 'lucide-react';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { generateWebsiteSchema, getCanonicalUrl } from '@/lib/seo/schema';
 
 const canonicalUrl = getCanonicalUrl('/');
 
 export const metadata: Metadata = {
-  title: 'Radiance | Handcrafted Solid Brass Architectural Hardware Foundry Exporter',
+  title: 'SB PATTERN WORKS | Architectural Hardware & Custom Metal Foundry Exporter',
   description:
-    'Direct Indian foundry manufacturer exporting solid brass door handles, mortise knobs, cabinet pulls, window stays, and wrought ironmongery to global specifiers.',
+    'SB PATTERN WORKS is a premier Indian foundry manufacturer exporting solid brass door handles, mortise knobs, cabinet pulls, window stays, and custom pattern metal components to global specifiers.',
   keywords: [
-    'Radiance Architectural Hardware',
+    'SB PATTERN WORKS',
     'Brass Hardware Manufacturer India',
-    'Aligarh Brass Foundry',
+    'Aligarh Metal Foundry',
+    'Custom Craft Manufacturing',
     'Architectural Door Handles Wholesale',
     'Solid Brass Cabinet Pulls Exporter',
   ],
@@ -33,15 +34,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: canonicalUrl,
-    title: 'Radiance | Handcrafted Solid Brass Architectural Hardware Foundry',
+    title: 'SB PATTERN WORKS | Architectural Hardware & Custom Metal Foundry',
     description:
-      'Direct Indian foundry manufacturer exporting solid brass, bronze, and iron architectural hardware worldwide.',
+      'Direct Indian foundry manufacturer exporting solid brass, bronze, copper, and custom pattern metal hardware worldwide.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Radiance | Architectural Hardware Foundry Exporter',
+    title: 'SB PATTERN WORKS | Metal Foundry & Hardware Exporter',
     description:
-      'Direct Indian foundry manufacturer exporting solid brass, bronze, and iron architectural hardware worldwide.',
+      'Direct Indian foundry manufacturer exporting solid brass, bronze, copper, and custom pattern metal hardware worldwide.',
   },
 };
 
@@ -93,75 +94,70 @@ export default async function HomePage() {
   ];
 
   return (
-    <div className="space-y-24 pb-20 font-sans bg-[#FAF9F6] text-[#222222]">
+    <div className="space-y-24 sm:space-y-32 pb-24 font-sans bg-[#FAF8F5] text-[#1C1917]">
       <JsonLd data={websiteSchema} />
+
       {/* GRAND EDITORIAL HERO SECTION */}
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-[#FAF9F6] text-[#222222] overflow-hidden border-b border-[#E5E2DA]">
-        {/* Background Image / Texture Frame */}
+      <section className="relative bg-[#FAF8F5] text-[#1C1917] overflow-hidden border-b border-[#E6E1D7]">
+        {/* Subtle Background Texture */}
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1920&auto=format&fit=crop"
-            alt="Radiance Hand-Cast Architectural Hardware Framework"
+            alt="SB Pattern Works Architectural Hardware"
             fill
             priority
-            className="object-cover object-center opacity-10 mix-blend-multiply scale-105"
+            className="object-cover object-center opacity-[0.06] mix-blend-multiply scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF9F6] via-[#FAF9F6]/80 to-[#FAF9F6]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F6] via-transparent to-[#FAF9F6]/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5] via-[#FAF8F5]/90 to-[#FAF8F5]" />
         </div>
 
-        {/* Ambient Gold Flare */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#B08D57]/10 rounded-full blur-[140px] pointer-events-none" />
-
         {/* Hero Centered Editorial Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center space-y-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F4F2ED] text-[#B08D57] rounded-[8px] border border-[#B08D57]/30 mx-auto">
-            <Hammer className="w-4 h-4 text-[#B08D57]" />
-            <span className="text-[11px] font-sans font-medium uppercase tracking-[0.22em]">
-              Architectural Brass Foundry & Exporter • Est. 1994
-            </span>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 lg:py-20 text-center space-y-6 sm:space-y-8">
+          <div className="eyebrow-tag justify-center mx-auto px-4 py-1.5 bg-[#F3F0E8] border border-[#E6E1D7] rounded-[4px]">
+            <Hammer className="w-3.5 h-3.5 text-[#9E7B47] stroke-[1.5]" />
+            <span>Architectural Brass Foundry & Exporter • Est. 1994</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight leading-[1.10] text-[#222222] max-w-4xl mx-auto">
-            Hand-Cast Brass & Hardware Crafted for <span className="text-[#B08D57] italic font-serif">Global Architectural Trade</span>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-medium tracking-tight leading-[1.10] text-[#1C1917] max-w-4xl mx-auto">
+            Hand-Cast Brass & Hardware Crafted for <span className="text-[#9E7B47] italic font-serif">Global Architectural Trade</span>
           </h1>
 
-          <p className="text-base sm:text-lg text-[#666666] font-sans font-normal leading-relaxed max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-[#6B635B] font-normal leading-relaxed max-w-2xl mx-auto">
             Direct factory manufacturer exporting solid brass, bronze, and hand-forged ironmongery. We supply architectural specifiers, commercial builders, hardware stockists, and B2B importers across North America, Europe, and the Middle East.
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          {/* Understated Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
               href="/products"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] font-sans text-xs font-medium uppercase tracking-[0.20em] rounded-[8px] transition-colors duration-200"
+              className="btn-luxury-primary w-full sm:w-auto"
             >
               <span>Browse Trade Catalog</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5 stroke-[1.5]" />
             </Link>
 
             <Link
               href="/request-quote"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#F4F2ED] hover:bg-[#E5E2DA] text-[#222222] font-sans text-xs font-medium uppercase tracking-[0.20em] rounded-[8px] border border-[#E5E2DA] transition-colors duration-200"
+              className="btn-luxury-secondary w-full sm:w-auto"
             >
-              <FileText className="w-4 h-4 text-[#B08D57]" />
+              <FileText className="w-3.5 h-3.5 text-[#9E7B47] stroke-[1.5]" />
               <span>Submit RFQ Enquiry</span>
             </Link>
           </div>
 
           {/* Heritage Metal Metadata Bar */}
-          <div className="pt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-[#E5E2DA] text-xs text-[#666666] font-sans max-w-3xl mx-auto">
+          <div className="pt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-[#E6E1D7] text-xs text-[#6B635B] max-w-3xl mx-auto">
             <div className="space-y-1">
-              <p className="font-serif font-bold text-[#222222] text-lg">Virgin Brass Alloys</p>
-              <p className="text-[11px] text-[#666666] font-normal">CuZn39Pb2 Solid Brass & Sand-Cast Bronze</p>
+              <p className="font-serif font-medium text-[#1C1917] text-lg">Virgin Brass Alloys</p>
+              <p className="text-[11px] text-[#6B635B]">CuZn39Pb2 Solid Brass & Sand-Cast Bronze</p>
             </div>
             <div className="space-y-1">
-              <p className="font-serif font-bold text-[#222222] text-lg">OEM Tooling & Custom CTC</p>
-              <p className="text-[11px] text-[#666666] font-normal">Bespoke Architectural CAD Specifications</p>
+              <p className="font-serif font-medium text-[#1C1917] text-lg">OEM Tooling & Custom CTC</p>
+              <p className="text-[11px] text-[#6B635B]">Bespoke Architectural CAD Specifications</p>
             </div>
             <div className="space-y-1">
-              <p className="font-serif font-bold text-[#222222] text-lg">Export Compliance</p>
-              <p className="text-[11px] text-[#666666] font-normal">BS EN 1906 / ISO 9227 Salt-Spray Tested</p>
+              <p className="font-serif font-medium text-[#1C1917] text-lg">Export Compliance</p>
+              <p className="text-[11px] text-[#6B635B]">BS EN 1906 / ISO 9227 Salt-Spray Tested</p>
             </div>
           </div>
         </div>
@@ -179,8 +175,8 @@ export default async function HomePage() {
       </section>
 
       {/* FEATURED PRODUCTS SECTION */}
-      <section className="bg-[#F4F2ED] py-24 border-y border-[#E5E2DA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section className="bg-[#F3F0E8] py-24 border-y border-[#E6E1D7]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <SectionHeading
               subtitle="High-Demand Export Hardware"
@@ -189,10 +185,10 @@ export default async function HomePage() {
             />
             <Link
               href="/products"
-              className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-[#B08D57] hover:text-[#9A7B4B] transition-colors self-start md:self-auto font-sans"
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9E7B47] hover:text-[#856637] transition-colors self-start md:self-auto"
             >
               <span>View Full Hardware Range ({featuredProducts.length}+)</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5 stroke-[1.5]" />
             </Link>
           </div>
 
@@ -206,7 +202,7 @@ export default async function HomePage() {
       </section>
 
       {/* ARCHITECTURAL COLLECTIONS SHOWCASE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <SectionHeading
           subtitle="Historic & Modern Hardware Series"
           title="Curated Architectural Collections"
@@ -220,11 +216,11 @@ export default async function HomePage() {
       </section>
 
       {/* WHY US - CRAFTSMANSHIP & B2B TRUST SECTION */}
-      <section className="bg-[#FAF9F6] text-[#222222] py-24 border-t border-[#E5E2DA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <section className="bg-[#FAF8F5] text-[#1C1917] py-24 border-t border-[#E6E1D7]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
           <SectionHeading
             subtitle="Direct Factory Capabilities"
-            title="Why International Buyers & Specifiers Partner With Radiance"
+            title="Why International Buyers & Specifiers Partner With SB Pattern Works"
             description="Our integrated foundry workflows, metallurgical controls, and direct export desks serve hardware stockists, architects, and commercial contractors worldwide."
             centered
           />
@@ -235,16 +231,16 @@ export default async function HomePage() {
               return (
                 <div
                   key={item.num}
-                  className="p-8 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] border-t-[#B08D57]/40 space-y-4 shadow-sm hover:border-[#B08D57]/60 transition-all duration-300 relative group"
+                  className="p-8 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-4 shadow-none hover:border-[#9E7B47]/50 transition-all duration-500 relative group"
                 >
-                  <span className="absolute top-6 right-6 font-serif text-sm font-bold text-[#666666]/60 group-hover:text-[#B08D57] transition-colors">
+                  <span className="absolute top-6 right-6 font-serif text-sm font-bold text-[#6B635B]/50 group-hover:text-[#9E7B47] transition-colors">
                     {item.num}
                   </span>
-                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#FAF9F6] border border-[#B08D57]/20 text-[#B08D57]">
-                    <IconComp className="w-5 h-5" />
+                  <div className="w-10 h-10 flex items-center justify-center rounded-[4px] bg-[#FAF8F5] border border-[#E6E1D7] text-[#9E7B47]">
+                    <IconComp className="w-4.5 h-4.5 stroke-[1.5]" />
                   </div>
-                  <h3 className="text-xl font-serif font-bold text-[#222222]">{item.title}</h3>
-                  <p className="text-xs text-[#666666] leading-relaxed font-normal">{item.desc}</p>
+                  <h3 className="text-xl font-serif font-medium text-[#1C1917]">{item.title}</h3>
+                  <p className="text-xs text-[#6B635B] leading-relaxed font-normal">{item.desc}</p>
                 </div>
               );
             })}
@@ -253,7 +249,7 @@ export default async function HomePage() {
       </section>
 
       {/* FAQ & EEAT TRADE KNOWLEDGE SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <SectionHeading
           subtitle="Frequently Asked Trade Questions"
           title="Architectural Hardware & Foundry FAQs"
@@ -261,58 +257,58 @@ export default async function HomePage() {
           centered
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
-          <div className="p-6 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] space-y-2">
-            <h3 className="font-serif font-bold text-base text-[#222222]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-7 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-2">
+            <h3 className="font-serif font-medium text-lg text-[#1C1917]">
               What is solid brass hardware and why is it preferred by architects?
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              Solid brass hardware is manufactured from an alloy of copper and zinc without hollow cores or cheap zinc/iron filler metals. Architects prefer solid brass because it is naturally corrosion-resistant, antimicrobial, structural, extremely durable, and capable of taking hand-applied patinas and high-durability PVD coatings that age gracefully.
+            <p className="text-xs text-[#6B635B] leading-relaxed">
+              Solid brass hardware is manufactured from an alloy of copper and zinc without hollow cores or cheap filler metals. Architects prefer solid brass because it is naturally corrosion-resistant, antimicrobial, structural, durable, and capable of taking hand-applied patinas and PVD coatings.
             </p>
           </div>
 
-          <div className="p-6 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] space-y-2">
-            <h3 className="font-serif font-bold text-base text-[#222222]">
+          <div className="p-7 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-2">
+            <h3 className="font-serif font-medium text-lg text-[#1C1917]">
               How long does solid brass architectural hardware last?
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed">
+            <p className="text-xs text-[#6B635B] leading-relaxed">
               High-quality solid brass hardware lasts for decades—often outlasting the building itself. Unlike zinc alloys (zamak) or plated steel which pit and rust within 2–5 years, solid brass retains structural integrity for 50+ years even under heavy commercial usage.
             </p>
           </div>
 
-          <div className="p-6 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] space-y-2">
-            <h3 className="font-serif font-bold text-base text-[#222222]">
+          <div className="p-7 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-2">
+            <h3 className="font-serif font-medium text-lg text-[#1C1917]">
               What finish is best for coastal marine environments?
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              PVD (Physical Vapor Deposition) Titanium finishes and Marine-Grade 316 Stainless Steel or Unlacquered Naval Brass are best for coastal environments. PVD finishes create a molecular bond that resists salt spray, oxidation, UV degradation, and tarnishing for over 10 years without pitting.
+            <p className="text-xs text-[#6B635B] leading-relaxed">
+              PVD (Physical Vapor Deposition) Titanium finishes and Marine-Grade 316 Stainless Steel or Unlacquered Naval Brass are best for coastal environments. PVD finishes create a molecular bond that resists salt spray, oxidation, UV degradation, and tarnishing.
             </p>
           </div>
 
-          <div className="p-6 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] space-y-2">
-            <h3 className="font-serif font-bold text-base text-[#222222]">
+          <div className="p-7 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-2">
+            <h3 className="font-serif font-medium text-lg text-[#1C1917]">
               What is the difference between forged brass and cast brass hardware?
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              Forged brass is produced by heating solid brass billets and stamping them under extreme hydraulic pressure, yielding dense grain structure ideal for thin, high-stress lever handles. Cast brass involves pouring molten metal into sand or investment molds, allowing intricate organic shapes, heavy wall thicknesses, and ornate decorative detailing.
+            <p className="text-xs text-[#6B635B] leading-relaxed">
+              Forged brass is produced by heating solid brass billets and stamping them under extreme hydraulic pressure. Cast brass involves pouring molten metal into sand or investment molds, allowing intricate organic shapes, heavy wall thicknesses, and ornate detailing.
             </p>
           </div>
 
-          <div className="p-6 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] space-y-2">
-            <h3 className="font-serif font-bold text-base text-[#222222]">
+          <div className="p-7 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-2">
+            <h3 className="font-serif font-medium text-lg text-[#1C1917]">
               How do I clean and maintain antique brass architectural hardware?
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              To clean antique brass, wipe gently with a soft microfiber cloth dampened with warm water and mild soap. Avoid abrasive metal polishes, chemical solvents, or scouring pads which strip hand-applied patinas. Apply a thin coat of natural beeswax annually to preserve the protective luster.
+            <p className="text-xs text-[#6B635B] leading-relaxed">
+              To clean antique brass, wipe gently with a soft microfiber cloth dampened with warm water and mild soap. Avoid abrasive metal polishes or chemical solvents which strip hand-applied patinas. Apply a thin coat of natural beeswax annually to preserve the protective luster.
             </p>
           </div>
 
-          <div className="p-6 bg-[#F4F2ED] rounded-2xl border border-[#E5E2DA] space-y-2">
-            <h3 className="font-serif font-bold text-base text-[#222222]">
-              Can Radiance manufacture custom OEM hardware from CAD drawings?
+          <div className="p-7 bg-[#F3F0E8] rounded-[6px] border border-[#E6E1D7] space-y-2">
+            <h3 className="font-serif font-medium text-lg text-[#1C1917]">
+              Can SB Pattern Works manufacture custom OEM hardware from CAD drawings?
             </h3>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              Yes, Radiance provides complete OEM/ODM contract manufacturing at our foundry in Aligarh, India. We convert 3D CAD models or physical samples into precision brass tooling, produce 3D-printed wax prototypes, and manufacture custom hardware lines under strict confidentiality (NDA).
+            <p className="text-xs text-[#6B635B] leading-relaxed">
+              Yes, SB Pattern Works provides complete OEM/ODM contract manufacturing at our foundry in Aligarh, India. We convert 3D CAD models or physical samples into precision brass tooling and produce custom hardware lines under strict confidentiality (NDA).
             </p>
           </div>
         </div>
@@ -320,21 +316,21 @@ export default async function HomePage() {
 
       {/* FINAL QUOTE BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#F4F2ED] rounded-2xl p-8 sm:p-14 text-[#222222] shadow-sm border border-[#E5E2DA] flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        <div className="bg-[#F3F0E8] rounded-[6px] p-8 sm:p-14 text-[#1C1917] border border-[#E6E1D7] flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
           <div className="space-y-2 text-center md:text-left relative z-10">
-            <span className="text-xs font-medium uppercase tracking-widest font-sans text-[#B08D57]">
+            <span className="eyebrow-tag">
               B2B Factory Direct Enquiry
             </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-serif font-medium tracking-tight">
               Require Direct Wholesale Pricing & Lead Times?
             </h2>
-            <p className="text-xs sm:text-sm text-[#666666] font-normal max-w-xl">
+            <p className="text-xs sm:text-sm text-[#6B635B] max-w-xl">
               Add products to your Quote List for a consolidated factory quotation. Our B2B export desk provides pricing within 24 hours.
             </p>
           </div>
           <Link
             href="/request-quote"
-            className="px-8 py-3.5 bg-[#B08D57] hover:bg-[#9A7B4B] text-[#FAF9F6] font-sans text-xs font-medium uppercase tracking-widest rounded-[8px] transition-colors duration-200 flex-shrink-0 relative z-10"
+            className="btn-luxury-primary flex-shrink-0 relative z-10"
           >
             Submit Trade RFQ Now
           </Link>

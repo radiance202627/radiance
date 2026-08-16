@@ -214,8 +214,8 @@ export default async function CategoryPage({
 
             {/* Why Choose Radiance Highlight */}
             <div className="p-4 bg-[#FAF9F6] rounded-[8px] border border-[#E5E2DA] text-xs text-[#222222]">
-              <strong className="font-serif block mb-1">Why Choose Radiance Aligarh Foundry:</strong>
-              <span className="text-[#666666]">{seoData.whyChooseRadiance}</span>
+              <strong className="font-serif block mb-1">Why Choose SB PATTERN WORKS Aligarh Foundry:</strong>
+              <span className="text-[#666666]">{seoData.whyChooseSBPatternWorks}</span>
             </div>
           </div>
 

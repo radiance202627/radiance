@@ -11,24 +11,42 @@
   }
 
   body {
-    @apply bg-[#FAF9F6] text-[#222222] font-sans selection:bg-[#B08D57]/20 selection:text-[#B08D57];
+    @apply bg-[#FAF8F5] text-[#1C1917] font-sans selection:bg-[#9E7B47]/20 selection:text-[#9E7B47];
   }
 
-  h1, h2, h3, h4, .font-serif-luxury {
-    font-family: var(--font-serif), 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  h1, h2, h3, h4, .font-serif {
+    font-family: var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
     letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+
+  p, span, button, input, select, textarea, label {
+    font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 }
 
-/* Artisan European Hardware Visual Utilities */
+/* Master Luxury Hardware Design Tokens */
 .card-luxury-frame {
-  @apply bg-[#F4F2ED] border border-[#E5E2DA] shadow-[0_10px_30px_rgba(0,0,0,0.04)] rounded-2xl transition-all duration-500;
+  @apply bg-[#F3F0E8] border border-[#E6E1D7] rounded-[6px] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)];
 }
 
 .card-luxury-frame:hover {
-  @apply border-[#B08D57]/40 shadow-[0_15px_40px_rgba(0,0,0,0.08)];
+  @apply border-[#9E7B47]/50 shadow-[0_8px_30px_rgba(28,25,23,0.06)];
 }
 
+.btn-luxury-primary {
+  @apply inline-flex items-center justify-center gap-2 px-7 py-3 bg-[#9E7B47] hover:bg-[#856637] text-[#FAF8F5] text-[11px] font-semibold uppercase tracking-[0.2em] rounded-[4px] transition-all duration-500 ease-out shadow-none border border-[#9E7B47];
+}
+
+.btn-luxury-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-7 py-3 bg-[#F3F0E8] hover:bg-[#EAE5DB] text-[#1C1917] text-[11px] font-semibold uppercase tracking-[0.2em] rounded-[4px] border border-[#E6E1D7] transition-all duration-500 ease-out;
+}
+
+.eyebrow-tag {
+  @apply inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#9E7B47];
+}
+
+/* Luxury Material Subtle Inset Border */
 .img-frame-inset {
   @apply relative overflow-hidden;
 }
@@ -37,7 +55,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(229, 226, 218, 0.6);
+  border: 1px solid rgba(230, 225, 215, 0.7);
   pointer-events: none;
   border-radius: inherit;
 }
@@ -48,20 +66,20 @@
   height: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #FAF9F6;
+  background: #FAF8F5;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #E5E2DA;
+  background: #E6E1D7;
   border-radius: 9999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #B08D57;
+  background: #9E7B47;
 }
 
-/* Image Presentation & Slow Zoom Animation */
+/* Handcrafted Image Presentation & Slow Zoom */
 .img-luxury-zoom {
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .group:hover .img-luxury-zoom {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }

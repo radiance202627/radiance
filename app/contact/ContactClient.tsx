@@ -90,9 +90,9 @@ export function ContactClient() {
                 <div>
                   <strong className="text-[#222222] block font-serif">Factory & Head Office</strong>
                   <p className="text-[#666666] font-normal mt-0.5 leading-relaxed">
-                    Building No. 4/2, Anoopshahr Road<br />
-                    Front of Radio Colony, Jatav Wali Gali Jamalpur<br />
-                    Aligarh, Uttar Pradesh - 202001, India
+                    E-41 CDF CHHERAT<br />
+                    INDUSTRIAL AREA CDF<br />
+                    ALIGARH, UTTAR PRADESH 202001, India
                   </p>
                 </div>
               </div>
@@ -100,9 +100,8 @@ export function ContactClient() {
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-[#B08D57] flex-shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-[#222222] block font-serif">Export Enquiries</strong>
-                  <p className="text-[#666666] font-normal mt-0.5">export@radiancehardware.com</p>
-                  <p className="text-[#666666] font-normal">sales@radiancehardware.com</p>
+                  <strong className="text-[#222222] block font-serif">Export & Sales Enquiries</strong>
+                  <p className="text-[#666666] font-normal mt-0.5">Sales@sbpatternworks.com</p>
                 </div>
               </div>
 

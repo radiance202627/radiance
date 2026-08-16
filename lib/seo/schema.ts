@@ -1,6 +1,6 @@
-import { Product, Category, Collection } from '@/lib/types';
+import { Product } from '@/lib/types';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://radiancehardware.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sbpatternworks.com';
 
 export function getCanonicalUrl(path: string = ''): string {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
@@ -12,15 +12,15 @@ export function generateOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${SITE_URL}/#organization`,
-    name: 'Radiance Architectural Hardware',
-    legalName: 'Radiance Hardware Manufacturers Private Limited',
+    name: 'SB PATTERN WORKS',
+    legalName: 'SB PATTERN WORKS Private Limited',
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
-    description: 'Premier manufacturer and exporter of handcrafted solid brass, bronze, and iron architectural door and cabinet hardware.',
+    description: 'Premier luxury manufacturer and exporter of handcrafted solid brass, copper, bronze, and custom pattern metal hardware.',
     foundingDate: '1994',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Building No. 4/2, Anoopshahr Road, Front of Radio Colony, Jamalpur',
+      streetAddress: 'E-41 CDF CHHERAT, INDUSTRIAL AREA CDF',
       addressLocality: 'Aligarh',
       addressRegion: 'Uttar Pradesh',
       postalCode: '202001',
@@ -31,14 +31,14 @@ export function generateOrganizationSchema() {
         '@type': 'ContactPoint',
         telephone: '+91-120-456-7890',
         contactType: 'export sales',
-        email: 'export@radiancehardware.com',
+        email: 'Sales@sbpatternworks.com',
         areaServed: ['US', 'GB', 'CA', 'AU', 'AE', 'DE', 'FR'],
         availableLanguage: ['English', 'Hindi'],
       },
     ],
     sameAs: [
-      'https://www.linkedin.com/company/radiance-architectural-hardware',
-      'https://www.instagram.com/radiancehardware',
+      'https://www.linkedin.com/company/sb-pattern-works',
+      'https://www.instagram.com/sbpatternworks',
     ],
   };
 }
@@ -48,15 +48,15 @@ export function generateLocalBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': 'ManufacturingBusiness',
     '@id': `${SITE_URL}/#localbusiness`,
-    name: 'Radiance Architectural Hardware Foundry',
+    name: 'SB PATTERN WORKS Foundry & Precision Machine Shop',
     image: `${SITE_URL}/images/factory-foundry.jpg`,
     url: SITE_URL,
     telephone: '+91-120-456-7890',
-    email: 'export@radiancehardware.com',
+    email: 'Sales@sbpatternworks.com',
     priceRange: '$$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Building No. 4/2, Anoopshahr Road, Front of Radio Colony, Jamalpur',
+      streetAddress: 'E-41 CDF CHHERAT, INDUSTRIAL AREA CDF',
       addressLocality: 'Aligarh',
       addressRegion: 'Uttar Pradesh',
       postalCode: '202001',
@@ -90,8 +90,8 @@ export function generateWebsiteSchema() {
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
     url: SITE_URL,
-    name: 'Radiance Architectural Hardware',
-    description: 'Export catalog and wholesale RFQ portal for architectural brass hardware.',
+    name: 'SB PATTERN WORKS',
+    description: 'Export catalog and wholesale RFQ portal for architectural brass hardware and custom craft manufacturing.',
     publisher: {
       '@id': `${SITE_URL}/#organization`,
     },
@@ -167,11 +167,11 @@ export function generateProductSchema(product: Product) {
     category: `${product.categoryName} > ${product.subcategoryName}`,
     brand: {
       '@type': 'Brand',
-      name: 'Radiance Architectural Hardware',
+      name: 'SB PATTERN WORKS',
     },
     manufacturer: {
       '@type': 'Organization',
-      name: 'Radiance Hardware Manufacturers Private Limited',
+      name: 'SB PATTERN WORKS Private Limited',
     },
     material: product.material,
     color: product.finishes.join(', '),
@@ -189,7 +189,7 @@ export function generateProductSchema(product: Product) {
       itemCondition: 'https://schema.org/NewCondition',
       seller: {
         '@type': 'Organization',
-        name: 'Radiance Hardware Manufacturers',
+        name: 'SB PATTERN WORKS',
       },
     },
   };
@@ -230,6 +230,63 @@ export function generateCollectionSchema(
   };
 }
 
+export function generateArticleSchema(article: {
+  title: string;
+  excerpt?: string | null;
+  slug: string;
+  featuredImage?: string | null;
+  author?: string | null;
+  publishDate?: Date | string | null;
+}) {
+  const articleUrl = getCanonicalUrl(`/blog/${article.slug}`);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${articleUrl}/#article`,
+    headline: article.title,
+    description: article.excerpt || article.title,
+    mainEntityOfPage: articleUrl,
+    image: article.featuredImage ? [article.featuredImage] : undefined,
+    datePublished: article.publishDate ? new Date(article.publishDate).toISOString() : new Date().toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: article.author || 'SB PATTERN WORKS',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'SB PATTERN WORKS',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+  };
+}
+
+export function generateGallerySchema(album: {
+  title: string;
+  description?: string | null;
+  slug: string;
+  items?: { url: string; title?: string | null; caption?: string | null }[];
+}) {
+  const albumUrl = getCanonicalUrl(`/gallery/${album.slug}`);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    '@id': `${albumUrl}/#gallery`,
+    name: album.title,
+    description: album.description || album.title,
+    url: albumUrl,
+    image: album.items?.map((item) => ({
+      '@type': 'ImageObject',
+      contentUrl: item.url,
+      caption: item.caption || item.title || album.title,
+    })),
+  };
+}
+
 export function generateContactPageSchema() {
   const url = getCanonicalUrl('/contact');
   return {
@@ -237,13 +294,13 @@ export function generateContactPageSchema() {
     '@type': 'ContactPage',
     '@id': `${url}/#contactpage`,
     url: url,
-    name: 'Contact Wholesale Division & Export Desk | Radiance Hardware',
+    name: 'Contact Wholesale Division & Export Desk | SB PATTERN WORKS',
     description: 'Direct communication desk for hardware specifiers, architects, and international bulk importers.',
     mainEntity: {
       '@type': 'ContactPoint',
       telephone: '+91-120-456-7890',
       contactType: 'Export Desk',
-      email: 'export@radiancehardware.com',
+      email: 'Sales@sbpatternworks.com',
       areaServed: 'Worldwide',
     },
   };

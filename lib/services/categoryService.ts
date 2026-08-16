@@ -172,31 +172,32 @@ export async function createCategory(data: {
   });
 }
 
-export async function updateCategory(
-  id: string,
-  data: Partial<{
-    name: string;
-    slug: string;
-    description: string;
-    image: string;
-    parentId: string | null;
-    sortOrder: number;
-    status: 'ACTIVE' | 'DRAFT' | 'ARCHIVED';
-    seoTitle: string;
-    seoDescription: string;
-    seoKeywords: string;
-    canonicalUrl: string;
-    ogImage: string;
-    updatedBy: string;
-  }>
-) {
-  if (data.name && !data.slug) {
-    data.slug = await generateUniqueSlug('category', data.name, id);
+export async function updateCategory(id: string, inputData: any) {
+  const rawData = { ...inputData };
+
+  let slug = rawData.slug;
+  if (rawData.name && !slug) {
+    slug = await generateUniqueSlug('category', rawData.name, id);
   }
+
+  const updateData: any = {};
+  if (rawData.name !== undefined) updateData.name = rawData.name;
+  if (slug !== undefined) updateData.slug = slug;
+  if (rawData.description !== undefined) updateData.description = rawData.description || null;
+  if (rawData.image !== undefined) updateData.image = rawData.image || null;
+  if (rawData.parentId !== undefined) updateData.parentId = rawData.parentId || null;
+  if (rawData.sortOrder !== undefined) updateData.sortOrder = Number(rawData.sortOrder);
+  if (rawData.status !== undefined) updateData.status = rawData.status;
+  if (rawData.seoTitle !== undefined) updateData.seoTitle = rawData.seoTitle || null;
+  if (rawData.seoDescription !== undefined) updateData.seoDescription = rawData.seoDescription || null;
+  if (rawData.seoKeywords !== undefined) updateData.seoKeywords = rawData.seoKeywords || null;
+  if (rawData.canonicalUrl !== undefined) updateData.canonicalUrl = rawData.canonicalUrl || null;
+  if (rawData.ogImage !== undefined) updateData.ogImage = rawData.ogImage || null;
+  if (rawData.updatedBy !== undefined) updateData.updatedBy = rawData.updatedBy || null;
 
   return prisma.category.update({
     where: { id },
-    data,
+    data: updateData,
   });
 }
 
