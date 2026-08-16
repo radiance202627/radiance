@@ -235,14 +235,17 @@ ${attachments.map((a, i) => `${i + 1}. ${a.fileName} (${a.fileUrl})`).join('\n')
           web3Data.append('name', name);
           web3Data.append('email', email);
           web3Data.append('phone', contactNumber);
-          web3Data.append('subject', `[${data.referenceNo}] New Custom Craft Request from ${name}`);
+          web3Data.append('subject', `New Custom Craft Enquiry: ${data.referenceNo} - ${name}`);
           web3Data.append('message', emailMessage);
           web3Data.append('from_name', 'SB Pattern Works Custom Craft');
+          web3Data.append('to_email', 'Sales@sbpatternworks.com');
 
-          await fetch('https://api.web3forms.com/submit', {
+          const web3Res = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             body: web3Data,
           });
+          const web3Json = await web3Res.json();
+          console.log('[CUSTOM_CRAFT_WEB3FORMS_SUCCESS]', web3Json);
         } catch (web3Err) {
           console.warn('[CUSTOM_CRAFT_WEB3FORMS_WARN]', web3Err);
         }
