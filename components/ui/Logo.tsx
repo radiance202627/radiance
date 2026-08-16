@@ -12,7 +12,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '' }) => {
       <img
         src="/logo.png"
         alt="SB PATTERN WORKS"
-        className="h-[75px] sm:h-[100px] w-auto object-contain transition-all duration-300"
+        className="h-[70px] sm:h-[90px] lg:h-[100px] w-auto object-contain transition-all duration-300 group-hover:scale-[1.02]"
       />
     </Link>
   );
