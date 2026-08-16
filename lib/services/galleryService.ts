@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { GalleryStatus, Prisma } from '@prisma/client';
 import { generateSlug } from '@/lib/utils/slug';
+import { revalidatePath } from 'next/cache';
 
 export const GALLERY_CATEGORIES = [
   'Factory',
@@ -99,6 +100,8 @@ export async function getGalleryAlbums(options?: {
       prisma.galleryAlbum.count({ where }),
     ]);
 
+    console.log(`[GALLERY_SERVICE_GET] Status: ${status}, Albums fetched: ${albums.length}, Total: ${total}`);
+
     return {
       albums,
       total,
@@ -113,7 +116,7 @@ export async function getGalleryAlbums(options?: {
 
 export async function getGalleryAlbumBySlug(slug: string) {
   try {
-    return await prisma.galleryAlbum.findFirst({
+    const album = await prisma.galleryAlbum.findFirst({
       where: {
         slug,
         deletedAt: null,
@@ -124,6 +127,9 @@ export async function getGalleryAlbumBySlug(slug: string) {
         },
       },
     });
+
+    console.log(`[GALLERY_SERVICE_SLUG] Slug: ${slug}, Found: ${!!album}, Items count: ${album?.items?.length || 0}`);
+    return album;
   } catch (err) {
     console.warn('[GALLERY_SERVICE_SLUG_WARN]', err);
     return null;
@@ -148,7 +154,7 @@ export async function getGalleryAlbumById(id: string) {
 export async function createGalleryAlbum(data: CreateGalleryAlbumInput) {
   const slug = data.slug ? generateSlug(data.slug) : generateSlug(data.title);
 
-  return await prisma.galleryAlbum.create({
+  const album = await prisma.galleryAlbum.create({
     data: {
       title: data.title,
       slug,
@@ -160,31 +166,46 @@ export async function createGalleryAlbum(data: CreateGalleryAlbumInput) {
       status: data.status || GalleryStatus.PUBLISHED,
       seoTitle: data.seoTitle || data.title,
       seoDescription: data.seoDescription || data.description || null,
-      items: data.items
+      items: Array.isArray(data.items) && data.items.length > 0
         ? {
             create: data.items.map((item, idx) => ({
               url: item.url,
-              title: item.title || null,
+              title: item.title || `Photo ${idx + 1}`,
               altText: item.altText || data.title,
               caption: item.caption || null,
-              sortOrder: item.sortOrder ?? idx,
+              sortOrder: item.sortOrder ?? idx + 1,
             })),
           }
         : undefined,
     },
     include: {
-      items: true,
+      items: {
+        orderBy: { sortOrder: 'asc' },
+      },
     },
   });
+
+  console.log(`[GALLERY_SERVICE_CREATE] Album created ID: ${album.id}, Slug: ${album.slug}, Items saved: ${album.items.length}`);
+
+  try {
+    revalidatePath('/gallery');
+    revalidatePath(`/gallery/${album.slug}`);
+  } catch (e) {
+    console.warn('[REVALIDATION_WARN]', e);
+  }
+
+  return album;
 }
 
 export async function updateGalleryAlbum(id: string, data: UpdateGalleryAlbumInput) {
+  const existing = await prisma.galleryAlbum.findUnique({ where: { id } });
+
   const updateData: Prisma.GalleryAlbumUpdateInput = {
     title: data.title,
     description: data.description,
     category: data.category,
     projectType: data.projectType,
-    featuredImage: data.featuredImage,
+    featuredImage: data.featuredImage || (data.items && data.items[0]?.url) || undefined,
     sortOrder: data.sortOrder,
     status: data.status,
     seoTitle: data.seoTitle,
@@ -197,20 +218,22 @@ export async function updateGalleryAlbum(id: string, data: UpdateGalleryAlbumInp
     updateData.slug = generateSlug(data.slug);
   }
 
-  if (data.items) {
+  if (Array.isArray(data.items)) {
     await prisma.galleryItem.deleteMany({ where: { albumId: id } });
-    updateData.items = {
-      create: data.items.map((item, idx) => ({
-        url: item.url,
-        title: item.title || null,
-        altText: item.altText || data.title || 'Gallery item',
-        caption: item.caption || null,
-        sortOrder: item.sortOrder ?? idx,
-      })),
-    };
+    if (data.items.length > 0) {
+      updateData.items = {
+        create: data.items.map((item, idx) => ({
+          url: item.url,
+          title: item.title || `Photo ${idx + 1}`,
+          altText: item.altText || data.title || 'Gallery item',
+          caption: item.caption || null,
+          sortOrder: item.sortOrder ?? idx + 1,
+        })),
+      };
+    }
   }
 
-  return await prisma.galleryAlbum.update({
+  const updated = await prisma.galleryAlbum.update({
     where: { id },
     data: updateData,
     include: {
@@ -219,24 +242,48 @@ export async function updateGalleryAlbum(id: string, data: UpdateGalleryAlbumInp
       },
     },
   });
+
+  console.log(`[GALLERY_SERVICE_UPDATE] Album updated ID: ${updated.id}, Slug: ${updated.slug}, Items saved: ${updated.items.length}`);
+
+  try {
+    revalidatePath('/gallery');
+    if (existing?.slug) revalidatePath(`/gallery/${existing.slug}`);
+    if (updated.slug) revalidatePath(`/gallery/${updated.slug}`);
+  } catch (e) {
+    console.warn('[REVALIDATION_WARN]', e);
+  }
+
+  return updated;
 }
 
 export async function softDeleteGalleryAlbum(id: string) {
-  return await prisma.galleryAlbum.update({
+  const album = await prisma.galleryAlbum.update({
     where: { id },
     data: { deletedAt: new Date() },
   });
+  try {
+    revalidatePath('/gallery');
+  } catch (e) {}
+  return album;
 }
 
 export async function restoreGalleryAlbum(id: string) {
-  return await prisma.galleryAlbum.update({
+  const album = await prisma.galleryAlbum.update({
     where: { id },
     data: { deletedAt: null },
   });
+  try {
+    revalidatePath('/gallery');
+  } catch (e) {}
+  return album;
 }
 
 export async function hardDeleteGalleryAlbum(id: string) {
-  return await prisma.galleryAlbum.delete({
+  const album = await prisma.galleryAlbum.delete({
     where: { id },
   });
+  try {
+    revalidatePath('/gallery');
+  } catch (e) {}
+  return album;
 }

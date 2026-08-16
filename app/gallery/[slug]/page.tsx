@@ -35,7 +35,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function SingleGalleryAlbumPage({ params }: { params: { slug: string } }) {
   const album = await getGalleryAlbumBySlug(params.slug);
