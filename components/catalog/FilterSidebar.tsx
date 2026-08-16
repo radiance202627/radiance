@@ -79,6 +79,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             setSelectedCategory(e.target.value);
             setSelectedSubcategory('');
           }}
+          aria-label="Filter by Category"
           className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="">All Categories</option>
@@ -99,6 +100,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
           <select
             value={selectedSubcategory}
             onChange={(e) => setSelectedSubcategory(e.target.value)}
+            aria-label="Filter by Subcategory"
             className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
           >
             <option value="">All Subcategories</option>
@@ -119,6 +121,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <select
           value={selectedCollection}
           onChange={(e) => setSelectedCollection(e.target.value)}
+          aria-label="Filter by Collection"
           className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="">All Collections</option>
@@ -138,6 +141,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <select
           value={selectedMaterial}
           onChange={(e) => setSelectedMaterial(e.target.value)}
+          aria-label="Filter by Base Material"
           className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="">All Materials</option>
@@ -157,6 +161,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <select
           value={selectedFinish}
           onChange={(e) => setSelectedFinish(e.target.value)}
+          aria-label="Filter by Architectural Finish"
           className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="">All Finishes</option>
@@ -176,6 +181,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <select
           value={selectedSize}
           onChange={(e) => setSelectedSize(e.target.value)}
+          aria-label="Filter by Dimensions or Size"
           className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="">All Sizes</option>
@@ -195,6 +201,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <select
           value={selectedStyle}
           onChange={(e) => setSelectedStyle(e.target.value)}
+          aria-label="Filter by Design Style"
           className="w-full text-xs bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] rounded-[8px] px-3 py-2 focus:outline-none focus:border-[#B08D57]"
         >
           <option value="">All Styles</option>

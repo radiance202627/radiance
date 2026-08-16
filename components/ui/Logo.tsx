@@ -17,10 +17,10 @@ export const Logo: React.FC<LogoProps> = ({ className = '' }) => {
       <Image
         src="/logo.png"
         alt="SB PATTERN WORKS Architectural Hardware & Custom Foundry"
-        width={300}
-        height={100}
+        width={255}
+        height={85}
         priority
-        className="h-[65px] sm:h-[85px] lg:h-[100px] w-auto object-contain transition-all duration-300 group-hover:scale-[1.02]"
+        className="h-[85px] w-auto object-contain transition-all duration-300 group-hover:scale-[1.02]"
       />
     </Link>
   );

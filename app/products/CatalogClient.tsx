@@ -203,6 +203,7 @@ export const CatalogClient: React.FC<CatalogClientProps> = ({
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
+                  aria-label="Sort product catalog"
                   className="bg-[#FAF9F6] border border-[#E5E2DA] text-[#222222] text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-[#B08D57] font-medium"
                 >
                   <option value="featured">Featured First</option>

@@ -504,6 +504,7 @@ ${attachments.map((a, i) => `${i + 1}. ${a.fileName} (${a.fileUrl})`).join('\n')
                 <select
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
+                  aria-label="Select custom craft purpose"
                   className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl text-xs text-[#222222] font-medium"
                 >
                   {PURPOSES.map((p) => (
@@ -601,6 +602,7 @@ ${attachments.map((a, i) => `${i + 1}. ${a.fileName} (${a.fileUrl})`).join('\n')
                       <select
                         value={selectedFinish}
                         onChange={(e) => setSelectedFinish(e.target.value)}
+                        aria-label="Select standard catalog finish"
                         className="w-full sm:w-80 px-3.5 py-2 bg-[#F4F2ED] border border-[#E5E2DA] rounded-xl text-xs text-[#222222] font-medium"
                       >
                         {STANDARD_FINISHES.map((f) => (

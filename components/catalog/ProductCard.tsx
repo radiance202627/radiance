@@ -115,6 +115,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <select
                 value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
+                aria-label={`Select size for ${product.name}`}
                 className="text-[11px] bg-[#FAF8F5] border border-[#E6E1D7] text-[#1C1917] rounded-[4px] px-2 py-1 focus:outline-none focus:border-[#9E7B47] font-medium"
               >
                 {product.sizes.map((s) => (
