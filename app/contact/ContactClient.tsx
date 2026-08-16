@@ -27,7 +27,8 @@ export function ContactClient() {
 
     try {
       const payload = new FormData();
-      payload.append('access_key', '5c13d35f-9934-4b1e-b53b-4c469ac826ea');
+      const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '5c13d35f-9934-4b1e-b53b-4c469ac826ea';
+      payload.append('access_key', apiKey);
       payload.append('name', formData.name);
       payload.append('email', formData.email);
       payload.append('phone', formData.phone);
