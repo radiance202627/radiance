@@ -243,7 +243,8 @@ export async function createProduct(data: {
   variants?: { size?: string; finish?: string; material?: string; sku?: string; variantCode?: string }[];
   collectionIds?: string[];
 }) {
-  const finalSlug = data.slug ? data.slug : await generateUniqueSlug('product', data.name);
+  const finalSlug = await generateUniqueSlug('product', data.slug || data.name);
+  const cleanSubcategoryId = data.subcategoryId && data.subcategoryId.trim() ? data.subcategoryId.trim() : null;
 
   return prisma.product.create({
     data: {
@@ -252,51 +253,57 @@ export async function createProduct(data: {
       sku: data.sku,
       productCode: data.productCode || data.sku,
       categoryId: data.categoryId,
-      subcategoryId: data.subcategoryId || null,
-      shortDescription: data.shortDescription,
-      description: data.description,
-      material: data.material,
-      finish: data.finish,
-      weight: data.weight,
-      dimensions: data.dimensions,
+      subcategoryId: cleanSubcategoryId,
+      shortDescription: data.shortDescription || null,
+      description: data.description || null,
+      material: data.material || 'Solid Brass',
+      finish: data.finish || null,
+      weight: data.weight || null,
+      dimensions: data.dimensions || null,
       styles: data.styles ? JSON.stringify(data.styles) : undefined,
       specifications: data.specifications ? JSON.stringify(data.specifications) : undefined,
       featured: data.featured ?? false,
       sortOrder: data.sortOrder ?? 0,
       status: data.status || ProductStatus.AVAILABLE,
       publishedAt: data.status === ProductStatus.PUBLISHED ? new Date() : undefined,
-      seoTitle: data.seoTitle,
-      seoDescription: data.seoDescription,
-      seoKeywords: data.seoKeywords,
+      seoTitle: data.seoTitle || null,
+      seoDescription: data.seoDescription || null,
+      seoKeywords: data.seoKeywords || null,
       canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/product/${finalSlug}`),
-      ogImage: data.ogImage,
-      createdBy: data.createdBy,
-      images: data.images
+      ogImage: data.ogImage || null,
+      createdBy: data.createdBy || null,
+      images: Array.isArray(data.images) && data.images.length > 0
         ? {
-            create: data.images.map((img) => ({
-              url: img.url,
-              altText: img.altText,
-              isFeatured: img.isFeatured ?? false,
-              sortOrder: img.sortOrder ?? 0,
-            })),
+            create: data.images
+              .filter((img) => img && img.url)
+              .map((img, idx) => ({
+                url: img.url,
+                altText: img.altText || data.name,
+                isFeatured: img.isFeatured ?? idx === 0,
+                sortOrder: img.sortOrder ?? idx + 1,
+              })),
           }
         : undefined,
       variants: Array.isArray(data.variants) && data.variants.length > 0
         ? {
-            create: data.variants.map((v, idx) => ({
-              size: v.size || null,
-              finish: v.finish || null,
-              material: v.material || null,
-              sku: v.sku && v.sku.trim() ? v.sku.trim() : (data.sku ? `${data.sku}-V${idx + 1}` : null),
-              variantCode: v.variantCode || null,
-            })),
+            create: data.variants
+              .filter((v) => v && (v.size || v.finish || v.material || v.sku || v.variantCode))
+              .map((v, idx) => ({
+                size: v.size || null,
+                finish: v.finish || null,
+                material: v.material || null,
+                sku: v.sku && v.sku.trim() ? v.sku.trim() : `${finalSlug}-V${idx + 1}-${Math.random().toString(36).substring(2, 6)}`,
+                variantCode: v.variantCode || null,
+              })),
           }
         : undefined,
-      collections: data.collectionIds
+      collections: Array.isArray(data.collectionIds) && data.collectionIds.length > 0
         ? {
-            create: data.collectionIds.map((cid) => ({
-              collectionId: cid,
-            })),
+            create: data.collectionIds
+              .filter(Boolean)
+              .map((cid) => ({
+                collectionId: cid,
+              })),
           }
         : undefined,
     },
