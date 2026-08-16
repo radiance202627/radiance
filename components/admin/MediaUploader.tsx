@@ -98,7 +98,8 @@ export default function MediaUploader({
       );
 
       if (multiple) {
-        onChange([...imageList, ...uploadedUrls]);
+        const uniqueUrls = Array.from(new Set([...imageList, ...uploadedUrls]));
+        onChange(uniqueUrls);
       } else {
         onChange(uploadedUrls[0]);
       }
@@ -106,6 +107,9 @@ export default function MediaUploader({
       setError(err?.message || 'Failed to upload image. Please try again.');
     } finally {
       updateUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       setTimeout(() => setProgress(0), 1000);
     }
   };

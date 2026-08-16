@@ -16,6 +16,7 @@ import {
   Clock,
   Archive,
   Image as ImageIcon,
+  Star,
 } from 'lucide-react';
 import { uploadImageToStorage } from '@/lib/storage';
 import { GALLERY_CATEGORIES } from '@/lib/services/galleryService';
@@ -428,15 +429,20 @@ export default function AdminGalleryPage() {
                   value={items.map((i) => i.url)}
                   onChange={(urls) => {
                     const newUrls = Array.isArray(urls) ? urls : [urls];
-                    setItems(
-                      newUrls.map((url, idx) => ({
-                        url,
-                        title: `Photo ${idx + 1}`,
-                        altText: title || 'Gallery Image',
-                        sortOrder: idx + 1,
-                      }))
-                    );
-                    if (newUrls.length > 0 && !featuredImage) {
+                    setItems((prevItems) => {
+                      return newUrls.map((url, idx) => {
+                        const existing = prevItems.find((pi) => pi.url === url);
+                        return (
+                          existing || {
+                            url,
+                            title: `Photo ${idx + 1}`,
+                            altText: title || 'Gallery Image',
+                            sortOrder: idx + 1,
+                          }
+                        );
+                      });
+                    });
+                    if (newUrls.length > 0 && (!featuredImage || !newUrls.includes(featuredImage))) {
                       setFeaturedImage(newUrls[0]);
                     }
                   }}
@@ -444,6 +450,93 @@ export default function AdminGalleryPage() {
                   folder="gallery"
                 />
               </div>
+
+              {/* Uploaded Photos Management List */}
+              {items.length > 0 && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#B08D57]">
+                      Album Photos ({items.length})
+                    </span>
+                    <span className="text-[11px] text-[#666666]">
+                      Click star to select Cover Image
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                    {items.map((item, idx) => (
+                      <div
+                        key={item.url + idx}
+                        className="flex items-center gap-3 p-2.5 bg-[#F4F2ED] border border-[#E5E2DA] rounded-xl"
+                      >
+                        <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-stone-200">
+                          <img src={item.url} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                          {featuredImage === item.url && (
+                            <div className="absolute top-0 left-0 bg-[#B08D57] text-[#FAF9F6] p-0.5 rounded-br-md">
+                              <Star className="w-3 h-3 fill-current" />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            placeholder={`Photo ${idx + 1} Title`}
+                            value={item.title || ''}
+                            onChange={(e) => {
+                              const updated = [...items];
+                              updated[idx] = { ...updated[idx], title: e.target.value };
+                              setItems(updated);
+                            }}
+                            className="px-2.5 py-1.5 bg-[#FAF9F6] border border-[#E5E2DA] rounded-lg text-xs text-[#222222]"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Caption (optional)"
+                            value={item.caption || ''}
+                            onChange={(e) => {
+                              const updated = [...items];
+                              updated[idx] = { ...updated[idx], caption: e.target.value };
+                              setItems(updated);
+                            }}
+                            className="px-2.5 py-1.5 bg-[#FAF9F6] border border-[#E5E2DA] rounded-lg text-xs text-[#222222]"
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => setFeaturedImage(item.url)}
+                            className={`p-1.5 rounded-lg transition ${
+                              featuredImage === item.url
+                                ? 'text-[#B08D57] bg-[#B08D57]/10 font-bold'
+                                : 'text-[#666666] hover:text-[#B08D57]'
+                            }`}
+                            title="Set as Cover Image"
+                          >
+                            <Star className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = items.filter((_, i) => i !== idx);
+                              setItems(updated);
+                              if (featuredImage === item.url) {
+                                setFeaturedImage(updated[0]?.url || '');
+                              }
+                            }}
+                            className="p-1.5 text-[#666666] hover:text-red-600 rounded-lg transition"
+                            title="Remove photo"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E2DA]">
                 <button
