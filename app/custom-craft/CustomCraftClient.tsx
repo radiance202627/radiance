@@ -235,10 +235,10 @@ ${attachments.map((a, i) => `${i + 1}. ${a.fileName} (${a.fileUrl})`).join('\n')
           web3Data.append('name', name);
           web3Data.append('email', email);
           web3Data.append('phone', contactNumber);
-          web3Data.append('subject', `New Custom Craft Enquiry: ${data.referenceNo} - ${name}`);
+          web3Data.append('company', companyName || '');
+          web3Data.append('subject', `[${data.referenceNo}] Custom Craft Request - ${name}`);
           web3Data.append('message', emailMessage);
           web3Data.append('from_name', 'SB Pattern Works Custom Craft');
-          web3Data.append('to_email', 'Sales@sbpatternworks.com');
 
           const web3Res = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
