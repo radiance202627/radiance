@@ -3,6 +3,7 @@ import { products as mockProducts } from '@/data/products';
 import { Product, ProductFilters } from '@/lib/types';
 import { ProductStatus } from '@prisma/client';
 import { generateUniqueSlug } from '@/lib/utils/slug';
+import { getCanonicalUrl } from '@/lib/seo/schema';
 
 export async function getProducts(filters?: ProductFilters): Promise<Product[]> {
   try {
@@ -267,7 +268,7 @@ export async function createProduct(data: {
       seoTitle: data.seoTitle,
       seoDescription: data.seoDescription,
       seoKeywords: data.seoKeywords,
-      canonicalUrl: data.canonicalUrl,
+      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/product/${finalSlug}`),
       ogImage: data.ogImage,
       createdBy: data.createdBy,
       images: data.images
@@ -479,7 +480,7 @@ export async function updateProduct(id: string, inputData: any) {
   if (rawData.seoTitle !== undefined) updateData.seoTitle = rawData.seoTitle || null;
   if (rawData.seoDescription !== undefined) updateData.seoDescription = rawData.seoDescription || null;
   if (rawData.seoKeywords !== undefined) updateData.seoKeywords = rawData.seoKeywords || null;
-  if (rawData.canonicalUrl !== undefined) updateData.canonicalUrl = rawData.canonicalUrl || null;
+  updateData.canonicalUrl = rawData.canonicalUrl || getCanonicalUrl(`/product/${finalSlug || existing.slug}`);
   if (rawData.ogImage !== undefined) updateData.ogImage = rawData.ogImage || null;
   if (rawData.updatedBy !== undefined) updateData.updatedBy = rawData.updatedBy || null;
 

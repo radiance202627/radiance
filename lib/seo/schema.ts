@@ -1,10 +1,19 @@
 import { Product } from '@/lib/types';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sbpatternworks.com';
+export function getBaseUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || 'https://sbpatternworks.com';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url.replace(/\/+$/, '');
+  }
+  return `https://${url}`.replace(/\/+$/, '');
+}
+
+export const SITE_URL = getBaseUrl();
 
 export function getCanonicalUrl(path: string = ''): string {
+  const baseUrl = getBaseUrl();
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  return `${SITE_URL}${cleanPath === '/' ? '' : cleanPath}`;
+  return `${baseUrl}${cleanPath === '/' ? '' : cleanPath}`;
 }
 
 export function generateOrganizationSchema() {

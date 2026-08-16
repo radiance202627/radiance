@@ -347,24 +347,13 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-medium text-[#666666] mb-1">Canonical URL</label>
-                <input
-                  type="text"
-                  value={canonicalUrl}
-                  onChange={(e) => setCanonicalUrl(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#FAF9F6] border border-[#E5E2DA] rounded-xl text-xs text-[#222222]"
-                />
-              </div>
-              <div>
-                <MediaUploader
-                  label="OG Social Share Image"
-                  value={ogImage}
-                  onChange={(url) => setOgImage(url as string)}
-                  folder="blogs"
-                />
-              </div>
+            <div>
+              <MediaUploader
+                label="OG Social Share Image"
+                value={ogImage}
+                onChange={(url) => setOgImage(url as string)}
+                folder="blogs"
+              />
             </div>
           </div>
         </div>

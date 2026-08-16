@@ -612,27 +612,13 @@ export default function EditProductPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-2">
-                Canonical URL
-              </label>
-              <input
-                type="url"
-                value={canonicalUrl}
-                onChange={(e) => setCanonicalUrl(e.target.value)}
-                className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-xs text-stone-100"
-              />
-            </div>
-
-            <div>
-              <MediaUploader
-                label="Open Graph Social Share Image"
-                value={ogImage}
-                onChange={(url) => setOgImage(url as string)}
-                folder="products"
-              />
-            </div>
+          <div>
+            <MediaUploader
+              label="Open Graph Social Share Image"
+              value={ogImage}
+              onChange={(url) => setOgImage(url as string)}
+              folder="products"
+            />
           </div>
         </div>
       )}

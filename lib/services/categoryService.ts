@@ -2,6 +2,7 @@ import prisma, { withDbTimeout } from '@/lib/prisma';
 import { categories as mockCategories } from '@/data/categories';
 import { Category, Subcategory } from '@/lib/types';
 import { generateUniqueSlug } from '@/lib/utils/slug';
+import { getCanonicalUrl } from '@/lib/seo/schema';
 
 export async function getCategories(): Promise<Category[]> {
   try {
@@ -165,7 +166,7 @@ export async function createCategory(data: {
       seoTitle: data.seoTitle,
       seoDescription: data.seoDescription,
       seoKeywords: data.seoKeywords,
-      canonicalUrl: data.canonicalUrl,
+      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/products/${slug}`),
       ogImage: data.ogImage,
       createdBy: data.createdBy,
     },
@@ -174,6 +175,8 @@ export async function createCategory(data: {
 
 export async function updateCategory(id: string, inputData: any) {
   const rawData = { ...inputData };
+  const existing = await prisma.category.findUnique({ where: { id } });
+  if (!existing) throw new Error('Category not found');
 
   let slug = rawData.slug;
   if (rawData.name && !slug) {
@@ -191,7 +194,7 @@ export async function updateCategory(id: string, inputData: any) {
   if (rawData.seoTitle !== undefined) updateData.seoTitle = rawData.seoTitle || null;
   if (rawData.seoDescription !== undefined) updateData.seoDescription = rawData.seoDescription || null;
   if (rawData.seoKeywords !== undefined) updateData.seoKeywords = rawData.seoKeywords || null;
-  if (rawData.canonicalUrl !== undefined) updateData.canonicalUrl = rawData.canonicalUrl || null;
+  updateData.canonicalUrl = rawData.canonicalUrl || getCanonicalUrl(`/products/${slug || existing.slug}`);
   if (rawData.ogImage !== undefined) updateData.ogImage = rawData.ogImage || null;
   if (rawData.updatedBy !== undefined) updateData.updatedBy = rawData.updatedBy || null;
 

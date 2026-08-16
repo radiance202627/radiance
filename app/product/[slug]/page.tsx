@@ -16,10 +16,10 @@ export async function generateMetadata({
 
   const canonicalUrl = getCanonicalUrl(`/product/${product.slug}`);
   const metaDescription = product.shortDescription || product.description;
-  const mainImage = product.images[0] || 'https://radiancehardware.com/og-image.jpg';
+  const mainImage = product.images[0] || getCanonicalUrl('/og-image.jpg');
 
   return {
-    title: `${product.name} | ${product.categoryName} | Radiance Architectural Hardware`,
+    title: `${product.name} | ${product.categoryName} | SB PATTERN WORKS`,
     description: metaDescription,
     keywords: [
       product.name,

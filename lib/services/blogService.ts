@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { BlogPostStatus, Prisma } from '@prisma/client';
+import { getCanonicalUrl } from '@/lib/seo/schema';
 import { generateSlug } from '@/lib/utils/slug';
 
 export interface CreateBlogPostInput {
@@ -152,7 +153,7 @@ export async function createBlogPost(data: CreateBlogPostInput) {
       author: data.author || 'SB Pattern Works',
       seoTitle: data.seoTitle || data.title,
       seoDescription: data.seoDescription || data.excerpt || null,
-      canonicalUrl: data.canonicalUrl || null,
+      canonicalUrl: data.canonicalUrl || getCanonicalUrl(`/blog/${slug}`),
       ogImage: data.ogImage || data.featuredImage || null,
       readingTime,
       featured: data.featured ?? false,
@@ -178,6 +179,10 @@ export async function updateBlogPost(id: string, data: UpdateBlogPostInput) {
   if (data.publishDate) {
     updateData.publishDate = new Date(data.publishDate);
   }
+
+  const existing = await prisma.blogPost.findUnique({ where: { id } });
+  const finalSlug = (updateData.slug as string) || existing?.slug || 'article';
+  updateData.canonicalUrl = data.canonicalUrl || getCanonicalUrl(`/blog/${finalSlug}`);
 
   return await prisma.blogPost.update({
     where: { id },
